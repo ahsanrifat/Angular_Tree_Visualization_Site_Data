@@ -31,5 +31,9 @@ export class AppComponent {
     this.hierarchialGraph = this.tree_data;
 
   }
+  get_width(data: any) {
+    console.log("Width called", data)
+    return data.width
+  }
 }
 
