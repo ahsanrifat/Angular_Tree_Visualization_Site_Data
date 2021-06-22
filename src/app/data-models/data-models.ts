@@ -10,4 +10,5 @@ export interface EdgesEntity {
   source: string;
   target: string;
   label: string;
+  width: number;
 }
