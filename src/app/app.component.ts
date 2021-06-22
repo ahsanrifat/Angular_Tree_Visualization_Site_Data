@@ -15,7 +15,8 @@ export class AppComponent {
   hierarchialGraph = { nodes: Array(), links: Array() }
   tree_data: TreeData = { nodes: Array(), links: Array() };
   result: string[] = [];
-  curve = shape.curveBundle.beta(1)
+  curve: any = shape.curveLinear;
+  // curve = shape.curveBundle.beta(1)
   center$: Subject<boolean> = new Subject();
   constructor(private dataService: DataServiceService) { }
   public ngOnInit(): void {
@@ -29,6 +30,7 @@ export class AppComponent {
   }
 
   showGraph() {
+    this.curve =shape.curveStepAfter;
     this.hierarchialGraph = this.tree_data;
     this.center$.next(true)
 
