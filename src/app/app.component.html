@@ -3,8 +3,7 @@
   class="chart-container"
   [view]="[4000, 1500]"
   [links]="hierarchialGraph.links"
-  [nodes]="hierarchialGraph.nodes"
-  [center$]="center$"
+  [nodes]="nodes"
 >
   <ng-template #defsTemplate>
     <svg:marker
@@ -20,7 +19,7 @@
     </svg:marker>
   </ng-template>
   <ng-template #nodeTemplate let-node>
-    <svg:g class="node" [tooltip]="node.label" placement="top">
+    <svg:g class="node" [tooltip]="get_tooltip(node.label)" placement="top">
       <svg:rect
         [attr.width]="node.dimension.width"
         [attr.height]="node.dimension.height"
@@ -37,11 +36,12 @@
   </ng-template>
 
   <ng-template #linkTemplate let-link>
-    <svg:g class="node" [tooltip]="link.label" placement="top"></svg:g>
+    <!-- <svg:g class="node" [tooltip]="link.label" placement="top"></svg:g> -->
     <svg:g class="edge">
       <svg:path
         class="line"
         [attr.stroke-width]="link.width"
+        [attr.stroke]="get_color(link.source)"
         marker-end=" url(#arrow)"
       ></svg:path>
       <svg:text class="edge-label" text-anchor="middle">
