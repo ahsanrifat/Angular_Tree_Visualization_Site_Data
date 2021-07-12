@@ -1,0 +1,606 @@
+{
+  "nodes": [
+      {
+          "count": 1,
+          "id": "S4808.H2FI.01",
+          "label": "S4808.H2FI.01",
+          "type": "site"
+      },
+      {
+          "count": 2,
+          "id": "WR-1681-TN01",
+          "label": "WR-1681-TN01",
+          "type": "site"
+      },
+      {
+          "count": 3,
+          "id": "1/1/1",
+          "label": "1/1/1",
+          "type": "link"
+      },
+      {
+          "count": 4,
+          "id": "WR-2726-TN01",
+          "label": "WR-2726-TN01",
+          "type": "link"
+      },
+      {
+          "count": 5,
+          "id": "1/1/1",
+          "label": "1/1/1",
+          "type": "link"
+      },
+      {
+          "count": 6,
+          "id": "WR-2725-TN01",
+          "label": "WR-2725-TN01",
+          "type": "link"
+      },
+      {
+          "count": 7,
+          "id": "1/6/2007",
+          "label": "1/6/2007",
+          "type": "link"
+      },
+      {
+          "count": 8,
+          "id": "Gi0/2/3",
+          "label": "Gi0/2/3",
+          "type": "link"
+      },
+      {
+          "count": 9,
+          "id": "RT7M3a.SNFN",
+          "label": "RT7M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 10,
+          "id": "Ten0/0/0",
+          "label": "Ten0/0/0",
+          "type": "link"
+      },
+      {
+          "count": 11,
+          "id": "Ten0/0/0",
+          "label": "Ten0/0/0",
+          "type": "link"
+      },
+      {
+          "count": 12,
+          "id": "MAKM3a.SNFN",
+          "label": "MAKM3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 13,
+          "id": "Ten0/2/8",
+          "label": "Ten0/2/8",
+          "type": "link"
+      },
+      {
+          "count": 14,
+          "id": "Ten0/10/8",
+          "label": "Ten0/10/8",
+          "type": "link"
+      },
+      {
+          "count": 15,
+          "id": "SHWM7a.SNFN",
+          "label": "SHWM7a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 16,
+          "id": "Ten0/13/8",
+          "label": "Ten0/13/8",
+          "type": "link"
+      },
+      {
+          "count": 17,
+          "id": "Ten0/10/8",
+          "label": "Ten0/10/8",
+          "type": "link"
+      },
+      {
+          "count": 18,
+          "id": "FAYM7a.SNFN",
+          "label": "FAYM7a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 19,
+          "id": "Te0/7/6",
+          "label": "Te0/7/6",
+          "type": "link"
+      },
+      {
+          "count": 20,
+          "id": "GigabitEthernet14/1/7",
+          "label": "GigabitEthernet14/1/7",
+          "type": "link"
+      },
+      {
+          "count": 21,
+          "id": "SHWQ.UPE.HCX16.01",
+          "label": "SHWQ.UPE.HCX16.01",
+          "type": "link"
+      },
+      {
+          "count": 22,
+          "id": "Te0/7/7",
+          "label": "Te0/7/7",
+          "type": "link"
+      },
+      {
+          "count": 23,
+          "id": "GigabitEthernet14/1/7",
+          "label": "GigabitEthernet14/1/7",
+          "type": "link"
+      },
+      {
+          "count": 24,
+          "id": "SHWQ.UPE.HCX16.02",
+          "label": "SHWQ.UPE.HCX16.02",
+          "type": "link"
+      },
+      {
+          "count": 25,
+          "id": "Ten0/7/2",
+          "label": "Ten0/7/2",
+          "type": "link"
+      },
+      {
+          "count": 26,
+          "id": "Ten0/0/0",
+          "label": "Ten0/0/0",
+          "type": "link"
+      },
+      {
+          "count": 27,
+          "id": "JM3M3a.SNFN",
+          "label": "JM3M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 28,
+          "id": "Ten0/14/8",
+          "label": "Ten0/14/8",
+          "type": "link"
+      },
+      {
+          "count": 29,
+          "id": "Ten0/3/8",
+          "label": "Ten0/3/8",
+          "type": "link"
+      },
+      {
+          "count": 30,
+          "id": "MAKM3a.SNFN",
+          "label": "MAKM3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 31,
+          "id": "Ten0/7/0",
+          "label": "Ten0/7/0",
+          "type": "link"
+      },
+      {
+          "count": 32,
+          "id": "Ten0/0/4",
+          "label": "Ten0/0/4",
+          "type": "link"
+      },
+      {
+          "count": 33,
+          "id": "RTAM3a.SNFN",
+          "label": "RTAM3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 34,
+          "id": "Ten0/0/3",
+          "label": "Ten0/0/3",
+          "type": "link"
+      },
+      {
+          "count": 35,
+          "id": "Ten0/0/3",
+          "label": "Ten0/0/3",
+          "type": "link"
+      },
+      {
+          "count": 36,
+          "id": "TK1M3a.SNFN",
+          "label": "TK1M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 37,
+          "id": "Ten0/0/4",
+          "label": "Ten0/0/4",
+          "type": "link"
+      },
+      {
+          "count": 38,
+          "id": "Ten0/0/6",
+          "label": "Ten0/0/6",
+          "type": "link"
+      },
+      {
+          "count": 39,
+          "id": "JM2M3a.SNFN",
+          "label": "JM2M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 40,
+          "id": "Ten0/0/1",
+          "label": "Ten0/0/1",
+          "type": "link"
+      },
+      {
+          "count": 41,
+          "id": "Ten0/0/1",
+          "label": "Ten0/0/1",
+          "type": "link"
+      },
+      {
+          "count": 42,
+          "id": "RT7M3a.SNFN",
+          "label": "RT7M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 43,
+          "id": "Ten0/0/5",
+          "label": "Ten0/0/5",
+          "type": "link"
+      },
+      {
+          "count": 44,
+          "id": "Ten0/0/5",
+          "label": "Ten0/0/5",
+          "type": "link"
+      },
+      {
+          "count": 45,
+          "id": "RT6M3a.SNFN",
+          "label": "RT6M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 46,
+          "id": "Ten0/3/8",
+          "label": "Ten0/3/8",
+          "type": "link"
+      },
+      {
+          "count": 47,
+          "id": "Ten0/3/8",
+          "label": "Ten0/3/8",
+          "type": "link"
+      },
+      {
+          "count": 48,
+          "id": "RT8M3a.SNFN",
+          "label": "RT8M3a.SNFN",
+          "type": "link"
+      },
+      {
+          "count": 49,
+          "id": "Ten0/0/2",
+          "label": "Ten0/0/2",
+          "type": "link"
+      },
+      {
+          "count": 50,
+          "id": "Ten0/0/1",
+          "label": "Ten0/0/1",
+          "type": "link"
+      },
+      {
+          "count": 51,
+          "id": "RT2M3a.SNFN",
+          "label": "RT2M3a.SNFN",
+          "type": "link"
+      }
+  ],
+  "edges": [
+      {
+          "count": 1,
+          "source": "WR-1681-TN01",
+          "target": "1/1/1",
+          "type": "site_link"
+      },
+      {
+          "count": 2,
+          "source": "1/1/1",
+          "target": "WR-2726-TN01",
+          "type": "link_site"
+      },
+      {
+          "count": 3,
+          "source": "WR-2726-TN01",
+          "target": "1/1/1",
+          "type": "site_link"
+      },
+      {
+          "count": 4,
+          "source": "1/1/1",
+          "target": "WR-2725-TN01",
+          "type": "link_site"
+      },
+      {
+          "count": 5,
+          "source": "WR-2725-TN01",
+          "target": "1/6/2007",
+          "type": "site_link"
+      },
+      {
+          "count": 6,
+          "source": "1/6/2007",
+          "target": "Gi0/2/3",
+          "type": "link_link"
+      },
+      {
+          "count": 7,
+          "source": "Gi0/2/3",
+          "target": "RT7M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 8,
+          "source": "RT7M3a.SNFN",
+          "target": "Ten0/0/0",
+          "type": "site_link"
+      },
+      {
+          "count": 9,
+          "source": "Ten0/0/0",
+          "target": "Ten0/0/0",
+          "type": "link_link"
+      },
+      {
+          "count": 10,
+          "source": "Ten0/0/0",
+          "target": "MAKM3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 11,
+          "source": "MAKM3a.SNFN",
+          "target": "Ten0/2/8",
+          "type": "site_link"
+      },
+      {
+          "count": 12,
+          "source": "Ten0/2/8",
+          "target": "Ten0/10/8",
+          "type": "link_link"
+      },
+      {
+          "count": 13,
+          "source": "Ten0/10/8",
+          "target": "SHWM7a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 14,
+          "source": "SHWM7a.SNFN",
+          "target": "Ten0/13/8",
+          "type": "site_link"
+      },
+      {
+          "count": 15,
+          "source": "Ten0/13/8",
+          "target": "Ten0/10/8",
+          "type": "link_link"
+      },
+      {
+          "count": 16,
+          "source": "Ten0/10/8",
+          "target": "FAYM7a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 17,
+          "source": "SHWM7a.SNFN",
+          "target": "Te0/7/6",
+          "type": "site_link"
+      },
+      {
+          "count": 18,
+          "source": "Te0/7/6",
+          "target": "GigabitEthernet14/1/7",
+          "type": "link_link"
+      },
+      {
+          "count": 19,
+          "source": "GigabitEthernet14/1/7",
+          "target": "SHWQ.UPE.HCX16.01",
+          "type": "link_site"
+      },
+      {
+          "count": 20,
+          "source": "SHWM7a.SNFN",
+          "target": "Te0/7/7",
+          "type": "site_link"
+      },
+      {
+          "count": 21,
+          "source": "Te0/7/7",
+          "target": "GigabitEthernet14/1/7",
+          "type": "link_link"
+      },
+      {
+          "count": 22,
+          "source": "GigabitEthernet14/1/7",
+          "target": "SHWQ.UPE.HCX16.02",
+          "type": "link_site"
+      },
+      {
+          "count": 23,
+          "source": "SHWM7a.SNFN",
+          "target": "Ten0/7/2",
+          "type": "site_link"
+      },
+      {
+          "count": 24,
+          "source": "Ten0/7/2",
+          "target": "Ten0/0/0",
+          "type": "link_link"
+      },
+      {
+          "count": 25,
+          "source": "Ten0/0/0",
+          "target": "JM3M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 26,
+          "source": "SHWM7a.SNFN",
+          "target": "Ten0/14/8",
+          "type": "site_link"
+      },
+      {
+          "count": 27,
+          "source": "Ten0/14/8",
+          "target": "Ten0/3/8",
+          "type": "link_link"
+      },
+      {
+          "count": 28,
+          "source": "Ten0/3/8",
+          "target": "MAKM3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 29,
+          "source": "SHWM7a.SNFN",
+          "target": "Ten0/7/0",
+          "type": "site_link"
+      },
+      {
+          "count": 30,
+          "source": "Ten0/7/0",
+          "target": "Ten0/0/4",
+          "type": "link_link"
+      },
+      {
+          "count": 31,
+          "source": "Ten0/0/4",
+          "target": "RTAM3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 32,
+          "source": "MAKM3a.SNFN",
+          "target": "Ten0/0/3",
+          "type": "site_link"
+      },
+      {
+          "count": 33,
+          "source": "Ten0/0/3",
+          "target": "Ten0/0/3",
+          "type": "link_link"
+      },
+      {
+          "count": 34,
+          "source": "Ten0/0/3",
+          "target": "TK1M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 35,
+          "source": "MAKM3a.SNFN",
+          "target": "Ten0/0/4",
+          "type": "site_link"
+      },
+      {
+          "count": 36,
+          "source": "Ten0/0/4",
+          "target": "Ten0/0/6",
+          "type": "link_link"
+      },
+      {
+          "count": 37,
+          "source": "Ten0/0/6",
+          "target": "JM2M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 38,
+          "source": "MAKM3a.SNFN",
+          "target": "Ten0/0/1",
+          "type": "site_link"
+      },
+      {
+          "count": 39,
+          "source": "Ten0/0/1",
+          "target": "Ten0/0/1",
+          "type": "link_link"
+      },
+      {
+          "count": 40,
+          "source": "Ten0/0/1",
+          "target": "RT7M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 41,
+          "source": "RT7M3a.SNFN",
+          "target": "Ten0/0/5",
+          "type": "site_link"
+      },
+      {
+          "count": 42,
+          "source": "Ten0/0/5",
+          "target": "Ten0/0/5",
+          "type": "link_link"
+      },
+      {
+          "count": 43,
+          "source": "Ten0/0/5",
+          "target": "RT6M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 44,
+          "source": "RT7M3a.SNFN",
+          "target": "Ten0/3/8",
+          "type": "site_link"
+      },
+      {
+          "count": 45,
+          "source": "Ten0/3/8",
+          "target": "Ten0/3/8",
+          "type": "link_link"
+      },
+      {
+          "count": 46,
+          "source": "Ten0/3/8",
+          "target": "RT8M3a.SNFN",
+          "type": "link_site"
+      },
+      {
+          "count": 47,
+          "source": "RT7M3a.SNFN",
+          "target": "Ten0/0/2",
+          "type": "site_link"
+      },
+      {
+          "count": 48,
+          "source": "Ten0/0/2",
+          "target": "Ten0/0/1",
+          "type": "link_link"
+      },
+      {
+          "count": 49,
+          "source": "Ten0/0/1",
+          "target": "RT2M3a.SNFN",
+          "type": "link_site"
+      }
+  ]
+}

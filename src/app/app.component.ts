@@ -1,10 +1,22 @@
 import { Component } from '@angular/core';
 import * as shape from 'd3-shape';
 // import { NgxGraphModule } from '@swimlane/ngx-graph';
-import { TreeData } from './data-models/data-models';
+// import { TreeData } from './data-models/data-models';
 import { DataServiceService } from './data-service.service';
-// import { Subject } from 'rxjs';
-
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexTitleSubtitle,
+} from 'ng-apexcharts';
+import { ViewChild } from '@angular/core';
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
+};
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,16 +28,97 @@ export class AppComponent {
   // tree_data: TreeData = { nodes: Array(), links: Array() };
   result: string[] = [];
   curve: any = shape.curveLinear;
+  @ViewChild('chart') chart: ChartComponent;
+  public chartOptions: ChartOptions;
 
   pm_data_tracker = {};
-  test={};
+  test = {};
   nodes = Array();
-  edges=Array();
+  edges = Array();
+  c = null;
 
   constructor(private dataService: DataServiceService) {}
   public ngOnInit(): void {
+    this.c = {
+      chart: {
+        height: 500, // like left
+      },
+      xAxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
+      yAxis: [
+        {
+          lineWidth: 1,
+          title: {
+            text: 'Primary Axis',
+          },
+        },
+        {
+          lineWidth: 1,
+          opposite: true,
+          title: {
+            text: 'Secondary Axis',
+          },
+        },
+      ],
 
-    // this.showGraph();
+      series: [
+        {
+          data: [
+            29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1,
+            95.6, 54.4,
+          ],
+        },
+        {
+          data: [
+            144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4, 29.9, 71.5,
+            106.4, 129.2,
+          ],
+          yAxis: 1,
+        },
+      ],
+    };
+    this.chartOptions = {
+      series: [
+        {
+          name: 'My-series',
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+        },
+      ],
+      chart: {
+        height: 350,
+        type: 'line',
+      },
+      title: {
+        text: 'My First Angular Chart',
+      },
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+        ],
+      },
+    };
   }
 
   showGraph(site_name) {
@@ -47,13 +140,13 @@ export class AppComponent {
       };
 
       this.dataService.get_pm_data(site_link).subscribe((data) => {
-        console.log(site_link,data)
+        console.log(site_link, data);
         if (data.hasOwnProperty('PM_Data')) {
           var pm_array = Array();
           pm_array = data['PM_Data'];
           if (pm_array.length > 0) {
             var latest_data = pm_array[pm_array.length - 1];
-            console.log(site_link,latest_data)
+            console.log(site_link, latest_data);
             if (latest_data.hasOwnProperty('Bandwidth')) {
               if (latest_data['Bandwidth'] != '') {
                 var bandwidth = Number(latest_data['Bandwidth']);
@@ -93,22 +186,22 @@ export class AppComponent {
                 }
               }
             }
-            this.pm_data_tracker[site_link]=
-            [
+            this.pm_data_tracker[site_link] = [
               {
-              Bandwidth: latest_data['Bandwidth'],
-              Interface: latest_data['Interface Availability'],
-              Inbound:latest_data['Inbound Bandwidth Utilization'],
-              Outbound:latest_data['Outbound Bandwidth Utilization'],
-              Utilization:utilization,
-            },{
-              color:return_data['colors'],
-              width:return_data['width']
-            }
-          ]
-          console.log("PM Data Tracker",this.pm_data_tracker[site_link])
-            }
+                Bandwidth: latest_data['Bandwidth'],
+                Interface: latest_data['Interface Availability'],
+                Inbound: latest_data['Inbound Bandwidth Utilization'],
+                Outbound: latest_data['Outbound Bandwidth Utilization'],
+                Utilization: utilization,
+              },
+              {
+                color: return_data['colors'],
+                width: return_data['width'],
+              },
+            ];
+            console.log('PM Data Tracker', this.pm_data_tracker[site_link]);
           }
+        }
       });
     } catch (err) {
       console.log(err);
@@ -117,44 +210,42 @@ export class AppComponent {
   }
   links(edges: any) {
     for (var indx in edges) {
-      var label = edges[indx]['label'].split(":");
-      var type=edges[indx]['type'];
+      var label = edges[indx]['label'].split(':');
+      var type = edges[indx]['type'];
 
-      if(type=='link'){
-        this.get_pm_data(label[0]+"/"+label[1])
+      if (type == 'link') {
+        this.get_pm_data(label[0] + '/' + label[1]);
       }
     }
-
-
   }
-  get_color(site){
+  get_color(site) {
     // console.log(site)
-    if(this.pm_data_tracker.hasOwnProperty(site)){
+    if (this.pm_data_tracker.hasOwnProperty(site)) {
       // console.log(this.pm_data_tracker[site][1].color)
-      return this.pm_data_tracker[site][1].color
-    }else{
-      return '#a9a9fc'
+      return this.pm_data_tracker[site][1].color;
+    } else {
+      return '#a9a9fc';
     }
   }
-  get_width(site){
+  get_width(site) {
     // console.log(site)
-    if(this.pm_data_tracker.hasOwnProperty(site)){
+    if (this.pm_data_tracker.hasOwnProperty(site)) {
       // console.log(this.pm_data_tracker[site][1].color)
-      return this.pm_data_tracker[site][1].width
-    }else{
-      return 2
+      return this.pm_data_tracker[site][1].width;
+    } else {
+      return 2;
     }
   }
-  get_tooltip(site){
-    if(this.pm_data_tracker.hasOwnProperty(site)){
-      var data=this.pm_data_tracker[site][0]
-      var str=""
-      for(var key in data){
-        str=str+` ${key}:${data[key]}<br/>`
+  get_tooltip(site) {
+    if (this.pm_data_tracker.hasOwnProperty(site)) {
+      var data = this.pm_data_tracker[site][0];
+      var str = '';
+      for (var key in data) {
+        str = str + ` ${key}:${data[key]}<br/>`;
       }
-      return str
-    }else{
-      return "No Data"
+      return str;
+    } else {
+      return 'No Data';
     }
   }
 }

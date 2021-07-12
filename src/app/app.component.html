@@ -16,8 +16,18 @@
     Search
   </button>
 </div>
+<!-- <div style="text-align: center">
+  <apx-chart
+    [series]="c.series"
+    [chart]="c.chart"
+    [xaxis]="c.xAxis"
+    [yaxis]="c.yAxis"
+    [title]="chartOptions.title"
+  ></apx-chart>
+</div> -->
 <ngx-graph
   class="chart-container"
+  layout="d3ForceDirected"
   [view]="[4000, 1500]"
   [links]="this.edges"
   [nodes]="nodes"
@@ -36,17 +46,13 @@
     </svg:marker>
   </ng-template>
   <ng-template #nodeTemplate let-node>
-    <svg:g
-      *ngIf="node.type == 'site'"
-      class="node"
-      placement="top"
-    >
+    <svg:g *ngIf="node.type == 'site'" class="node" placement="top">
       <svg:rect
-        [attr.width]="node.dimension.width+2"
-        [attr.height]="node.dimension.height+6"
+        [attr.width]="node.dimension.width + 2"
+        [attr.height]="node.dimension.height + 6"
         [attr.fill]="node.data.color"
-        rx='20'
-        ry='10'
+        rx="20"
+        ry="10"
       />
 
       <svg:text
@@ -65,8 +71,8 @@
       placement="top"
     >
       <svg:rect
-        [attr.width]="node.dimension.width-1"
-        [attr.height]="node.dimension.height-1"
+        [attr.width]="node.dimension.width - 1"
+        [attr.height]="node.dimension.height - 1"
         [attr.fill]="get_color(node.label)"
       />
 
@@ -85,15 +91,14 @@
     <!-- <svg:g class="node" [tooltip]="link.label" placement="top"></svg:g> -->
     <svg:g class="edge">
       <svg:path
-        *ngIf="link.type=='link_link'"
+        *ngIf="link.type == 'link_link'"
         class="line"
         [attr.stroke-width]="3"
-        stroke-dasharray="10,10"
         stroke="black"
         marker-end=" url(#arrow)"
       ></svg:path>
       <svg:path
-        *ngIf="link.type!='link_link'"
+        *ngIf="link.type != 'link_link'"
         class="line"
         [attr.stroke-width]="3"
         stroke="black"
