@@ -7,13 +7,9 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { TooltipModule } from 'ng2-tooltip-directive';
-import { NgApexchartsModule } from 'ng-apexcharts';
-// import {ApexCharts} from 'apexcharts'
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,9 +17,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     BrowserAnimationsModule,
     HttpClientModule,
     TooltipModule,
-    NgApexchartsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
