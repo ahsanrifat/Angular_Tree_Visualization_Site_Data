@@ -1,12 +1,18 @@
 <div class="jumbotron text-center">
   <h3>Search a site name:</h3>
+  <h5>Example: WR-7080-TN01</h5>
 </div>
 <div class="container">
   <div class="form-group">
-    <label for="usr">Name:</label>
+    <label for="usr">Node Name:</label>
     <input type="text" #titleInput class="form-control" />
   </div>
   <br />
+  <select (change)="graphChange($event)">
+    <option value="ngx-forced">ngx-graph forced directed</option>
+    <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option>
+    <option value="d3-3d-graph-text">D3 3D Graph Text Node</option></select
+  ><br /><br />
   <button
     type="button"
     (click)="showGraph(titleInput.value)"
@@ -14,86 +20,18 @@
   >
     Search
   </button>
+
+  <app-ngx-graph-fd
+    *ngIf="graph_type == 'ngx-forced'"
+    [graph_data]="graph_data"
+  ></app-ngx-graph-fd>
+
+  <app-d3-graph-bubble
+    *ngIf="graph_type == 'd3-3d-graph-bubble'"
+    [graph_data]="graph_data"
+  ></app-d3-graph-bubble>
+  <app-d3-graph-text-node
+    *ngIf="graph_type == 'd3-3d-graph-text'"
+    [graph_data]="graph_data"
+  ></app-d3-graph-text-node>
 </div>
-<!--view [width, height] -->
-<ngx-graph
-  class="chart-container"
-  layout="d3ForceDirected"
-  [view]="[4000, 1500]"
-  [links]="this.edges"
-  [nodes]="nodes"
->
-  <ng-template #defsTemplate>
-    <svg:marker
-      id="arrow"
-      viewBox="0 -5 10 10"
-      refX="8"
-      refY="0"
-      markerWidth="4"
-      markerHeight="4"
-      orient="auto"
-    >
-      <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
-    </svg:marker>
-  </ng-template>
-  <ng-template #nodeTemplate let-node>
-    <svg:g *ngIf="node.type == 'site'" class="node" placement="top">
-      <svg:rect
-        [attr.width]="node.dimension.width + 2"
-        [attr.height]="node.dimension.height + 6"
-        [attr.fill]="node.data.color"
-        rx="20"
-        ry="10"
-      />
-
-      <svg:text
-        dominant-baseline="middle"
-        alignment-baseline="central"
-        [attr.x]="10"
-        [attr.y]="node.dimension.height / 2"
-      >
-        {{ node.label }}
-      </svg:text>
-    </svg:g>
-    <svg:g
-      *ngIf="node.type == 'link'"
-      class="node"
-      [tooltip]="get_tooltip(node.label)"
-      placement="top"
-    >
-      <svg:rect
-        [attr.width]="node.dimension.width - 1"
-        [attr.height]="node.dimension.height - 1"
-        [attr.fill]="get_color(node.label)"
-      />
-
-      <svg:text
-        dominant-baseline="middle"
-        alignment-baseline="central"
-        [attr.x]="10"
-        [attr.y]="node.dimension.height / 2"
-      >
-        {{ node.label.split(":")[1] }}
-      </svg:text>
-    </svg:g>
-  </ng-template>
-
-  <ng-template #linkTemplate let-link>
-    <svg:g class="edge">
-      <svg:path
-        *ngIf="link.type == 'link_link'"
-        class="line"
-        [attr.stroke-width]="3"
-        stroke="black"
-        marker-end=" url(#arrow)"
-      ></svg:path>
-      <svg:path
-        *ngIf="link.type != 'link_link'"
-        class="line"
-        [attr.stroke-width]="3"
-        stroke="black"
-        marker-end=" url(#arrow)"
-      ></svg:path>
-    </svg:g>
-  </ng-template>
-</ngx-graph>
