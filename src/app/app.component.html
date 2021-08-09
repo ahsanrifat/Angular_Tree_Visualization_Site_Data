@@ -1,37 +1,97 @@
-<div class="jumbotron text-center">
-  <h3>Search a site name:</h3>
-  <h5>Example: WR-7080-TN01</h5>
-</div>
-<div class="container">
-  <div class="form-group">
-    <label for="usr">Node Name:</label>
-    <input type="text" #titleInput class="form-control" />
+<div class="row">
+  <div class="col-xl-4">
+    <div class="card-body">
+      <h2>Search a site name:</h2>
+      <!-- <h3>Example: WR-7080-TN01</h3> -->
+    </div>
+    <div class="container">
+      <div class="form-group">
+        <!-- <select (change)="graphChange($event)">
+          <option value="d3-3d-graph-text">D3 3D Graph Text Node</option>
+          <option value="ngx-forced">ngx-graph forced directed</option>
+          <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option></select
+        ><br /><br /> -->
+        <div class="row">
+          <div class="col-xl-3"><label for="usr">Node Name:</label></div>
+          <div class="col-xl-5">
+            <input
+              type="text"
+              #titleInput
+              class="form-control"
+              placeholder="6055"
+            />
+          </div>
+          <div class="col-xl-4">
+            <button
+              type="button"
+              (click)="showGraph(titleInput.value)"
+              class="btn btn-primary"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <br />
-  <select (change)="graphChange($event)">
-    <option value="ngx-forced">ngx-graph forced directed</option>
-    <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option>
-    <option value="d3-3d-graph-text">D3 3D Graph Text Node</option></select
-  ><br /><br />
-  <button
-    type="button"
-    (click)="showGraph(titleInput.value)"
-    class="btn btn-primary"
-  >
-    Search
-  </button>
-
-  <app-ngx-graph-fd
-    *ngIf="graph_type == 'ngx-forced'"
-    [graph_data]="graph_data"
-  ></app-ngx-graph-fd>
-
-  <app-d3-graph-bubble
-    *ngIf="graph_type == 'd3-3d-graph-bubble'"
-    [graph_data]="graph_data"
-  ></app-d3-graph-bubble>
-  <app-d3-graph-text-node
-    *ngIf="graph_type == 'd3-3d-graph-text'"
-    [graph_data]="graph_data"
-  ></app-d3-graph-text-node>
+  <div class="col-xl-4">
+    <div class="row">
+      <div class="col-xl-6">
+        <h3>Voice/Data :</h3>
+        <div class="select">
+          <select
+            name="format"
+            id="format"
+            #op1
+            (change)="on_option_select(op1.value)"
+          >
+            <option selected="selected" disabled="disabled">
+              Select Option
+            </option>
+            <option value="Voice">Voice</option>
+            <option value="Data">Data</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xl-6">
+        <h3>Type :</h3>
+        <div class="select">
+          <select name="format" id="format">
+            <option selected="selected" disabled="disabled">
+              Select Option
+            </option>
+            <option *ngFor="let op of option" [value]="op">
+              {{ op }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4" *ngIf="this.dataService.node_data">
+    <span>Node Name: </span>
+    <span>{{ this.dataService.node_data.name }}</span
+    ><br />
+    <span>Interface: </span>
+    <span>{{ this.dataService.node_data.interface }}</span
+    ><br />
+    <span>Bandwidth: </span>
+    <span>{{ this.dataService.node_data.bandwidth }}</span
+    ><br />
+  </div>
 </div>
+
+<!-- <app-optional-graph></app-optional-graph> -->
+<app-ngx-graph-fd
+  *ngIf="graph_type == 'ngx-forced'"
+  [graph_data]="graph_data"
+></app-ngx-graph-fd>
+
+<app-d3-graph-bubble
+  *ngIf="graph_type == 'd3-3d-graph-bubble'"
+  [graph_data]="graph_data"
+></app-d3-graph-bubble>
+<app-d3-graph-text-node
+  *ngIf="graph_type == 'd3-3d-graph-text'"
+  [graph_data]="graph_data"
+></app-d3-graph-text-node>

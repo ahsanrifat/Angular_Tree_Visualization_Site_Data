@@ -12,3 +12,8 @@ export interface EdgesEntity {
   label: string;
   width: number;
 }
+export interface NodeDataView {
+  name: string;
+  interface: string;
+  bandwidth: number;
+}

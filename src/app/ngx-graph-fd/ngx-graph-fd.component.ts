@@ -13,9 +13,9 @@ export class NgxGraphFdComponent implements OnInit {
   links = Array();
   @Input() graph_data = new EventEmitter<[]>();
   ngOnInit(): void {
-    console.log('NGX GRAPH FD started');
+    console.log('NGX GRAPH FD started', this.nodes);
     this.graph_data.subscribe((data) => {
-      console.log('NGX_GRAPH_FD->', data);
+      // console.log('NGX_GRAPH_FD->', data);
       if (data.hasOwnProperty('nodes') && data.hasOwnProperty('links')) {
         this.nodes = data['nodes'];
         this.links = data['links'];
