@@ -1,0 +1,22 @@
+/* .mat-select {
+  border: 1px solid rgb(132, 32, 178) !important ;
+  background: rgb(247, 247, 247);
+  height: 30px !important;
+}
+.mat-select-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+} */
+.card-body {
+  padding: 5px !important;
+}
+.mat-expansion-panel {
+  background: #7b5496;
+  color: #000;
+}
+.exp-body {
+  background: #ffffff;
+  color: #000;
+}
+.demo-table {
+  width: 100%;
+}

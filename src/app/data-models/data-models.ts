@@ -17,3 +17,9 @@ export interface NodeDataView {
   interface: string;
   bandwidth: number;
 }
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}

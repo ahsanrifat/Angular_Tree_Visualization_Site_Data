@@ -1,31 +1,83 @@
-<div class="row">
-  <div class="col-xl-4">
-    <div class="card-body">
-      <h2>Search a site name:</h2>
-      <!-- <h3>Example: WR-7080-TN01</h3> -->
-    </div>
-    <div class="container">
-      <div class="form-group">
-        <!-- <select (change)="graphChange($event)">
-          <option value="d3-3d-graph-text">D3 3D Graph Text Node</option>
-          <option value="ngx-forced">ngx-graph forced directed</option>
-          <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option></select
-        ><br /><br /> -->
+<div class="row" style="margin-top: 10px; margin-left: 8px">
+  <div class="col-xl-6">
+    <div class="row">
+      <div class="col-xl-6">
         <div class="row">
-          <div class="col-xl-3"><label for="usr">Node Name:</label></div>
+          <div class="col-xl-8">
+            <h1>Topology Explorer</h1>
+          </div>
+          <div class="col-xl-4">
+            <mat-spinner *ngIf="show_loading" diameter="30"></mat-spinner>
+          </div>
+        </div>
+
+        <!-- <select (change)="graphChange($event)">
+              <option value="d3-3d-graph-text">D3 3D Graph Text Node</option>
+              <option value="ngx-forced">ngx-graph forced directed</option>
+              <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option></select
+            ><br /><br /> -->
+      </div>
+      <!-- Voice Data select for msc topology -->
+      <!-- <div class="col-xl-4">
+        <div class="row">
+          <div class="col-xl-6">
+            <h3>Voice/Data :</h3>
+            <div class="select">
+              <select
+                name="format"
+                id="format"
+                #op1
+                (change)="on_option_select(op1.value)"
+              >
+                <option selected="selected" disabled="disabled">
+                  Select Option
+                </option>
+                <option value="Voice">Voice</option>
+                <option value="Data">Data</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xl-6">
+            <h3>Type :</h3>
+            <div class="select">
+              <select name="format" id="format">
+                <option selected="selected" disabled="disabled">
+                  Select Option
+                </option>
+                <option *ngFor="let op of option" [value]="op">
+                  {{ op }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-xl-6 card-body">
+        <h3>Choose a topology type</h3>
+        <select placeholder="Step By Step" (change)="graphNatureChange($event)">
+          <option value="step">Step By Step</option>
+          <option value="no_step">Full Graph</option>
+        </select>
+      </div>
+    </div>
+    <!-- Search Site Part -->
+    <div class="row">
+      <div class="col-xl-6">
+        <div class="row">
           <div class="col-xl-5">
             <input
               type="text"
               #titleInput
               class="form-control"
-              placeholder="6055"
+              value="WR-7080-TN01"
             />
+            <h6>Example : WR-7080-TN01</h6>
           </div>
           <div class="col-xl-4">
             <button
-              type="button"
+              mat-raised-button
+              color="primary"
               (click)="showGraph(titleInput.value)"
-              class="btn btn-primary"
             >
               Search
             </button>
@@ -34,64 +86,69 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-4">
-    <div class="row">
-      <div class="col-xl-6">
-        <h3>Voice/Data :</h3>
-        <div class="select">
-          <select
-            name="format"
-            id="format"
-            #op1
-            (change)="on_option_select(op1.value)"
-          >
-            <option selected="selected" disabled="disabled">
-              Select Option
-            </option>
-            <option value="Voice">Voice</option>
-            <option value="Data">Data</option>
-          </select>
-        </div>
+  <div class="col-xl-6">
+    <mat-expansion-panel
+      (opened)="this.dataService.panelOpenState = true"
+      (closed)="this.dataService.panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> Node Information </mat-panel-title>
+        <mat-panel-description>
+          Panel {{ this.dataService.panelOpenState ? "open" : "closed" }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="exp-body">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 demo-table"
+        >
+          <!-- Position Column -->
+          <ng-container matColumnDef="demo-position">
+            <th mat-header-cell *matHeaderCellDef>Source</th>
+            <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="demo-name">
+            <th mat-header-cell *matHeaderCellDef>Interface</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="demo-weight">
+            <th mat-header-cell *matHeaderCellDef>Utilization</th>
+            <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="demo-symbol">
+            <th mat-header-cell *matHeaderCellDef>Destination</th>
+            <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
       </div>
-      <div class="col-xl-6">
-        <h3>Type :</h3>
-        <div class="select">
-          <select name="format" id="format">
-            <option selected="selected" disabled="disabled">
-              Select Option
-            </option>
-            <option *ngFor="let op of option" [value]="op">
-              {{ op }}
-            </option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-4" *ngIf="this.dataService.node_data">
-    <span>Node Name: </span>
-    <span>{{ this.dataService.node_data.name }}</span
-    ><br />
-    <span>Interface: </span>
-    <span>{{ this.dataService.node_data.interface }}</span
-    ><br />
-    <span>Bandwidth: </span>
-    <span>{{ this.dataService.node_data.bandwidth }}</span
-    ><br />
+    </mat-expansion-panel>
   </div>
 </div>
 
 <!-- <app-optional-graph></app-optional-graph> -->
-<app-ngx-graph-fd
-  *ngIf="graph_type == 'ngx-forced'"
-  [graph_data]="graph_data"
-></app-ngx-graph-fd>
 
-<app-d3-graph-bubble
-  *ngIf="graph_type == 'd3-3d-graph-bubble'"
-  [graph_data]="graph_data"
-></app-d3-graph-bubble>
-<app-d3-graph-text-node
-  *ngIf="graph_type == 'd3-3d-graph-text'"
-  [graph_data]="graph_data"
-></app-d3-graph-text-node>
+<div>
+  <app-ngx-graph-fd
+    *ngIf="graph_type == 'ngx-forced'"
+    [graph_data]="graph_data"
+  ></app-ngx-graph-fd>
+
+  <app-d3-graph-bubble
+    *ngIf="graph_type == 'd3-3d-graph-bubble'"
+    [graph_data]="graph_data"
+  ></app-d3-graph-bubble>
+  <app-d3-graph-text-node
+    *ngIf="graph_type == 'd3-3d-graph-text'"
+    [graph_data]="graph_data"
+  ></app-d3-graph-text-node>
+</div>

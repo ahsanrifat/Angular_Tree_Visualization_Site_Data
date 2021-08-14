@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NodeDataView } from './data-models/data-models';
 
@@ -6,8 +6,11 @@ import { NodeDataView } from './data-models/data-models';
   providedIn: 'root',
 })
 export class DataServiceService {
+  api_loading = new EventEmitter<boolean>();
+  panelOpenState = false;
   current_source: string = null;
   node_data: NodeDataView = null;
+  graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
   test_api(site: string) {
