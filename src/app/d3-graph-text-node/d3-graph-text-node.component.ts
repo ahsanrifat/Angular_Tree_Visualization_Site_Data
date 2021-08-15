@@ -58,11 +58,22 @@ export class D3GraphTextNodeComponent implements OnInit {
           sprite.textHeight = 8;
           return sprite;
         })
-        .onNodeClick((node: { type; label; id }) => {
-          console.log('Node click-', node.type);
-          if (node.type != 'link') {
+        .onNodeClick((node: { type; label; id; is_expanded }) => {
+          console.log('Node click-', node.id, node.is_expanded);
+          if (
+            node.type != 'link' &&
+            node.is_expanded == false &&
+            this.child_dict.hasOwnProperty(node.id) == true
+          ) {
+            node.is_expanded = true;
             this.make_links(node.id);
             myGraph.graphData({ nodes: this.nodes, links: this.links });
+          } else if (
+            node.type != 'link' &&
+            (node.is_expanded == true ||
+              this.child_dict.hasOwnProperty(node.id) != true)
+          ) {
+            this.dataService.panelOpenState = true;
           }
         });
       myGraph.d3Force('charge').strength(-120);
@@ -91,6 +102,9 @@ export class D3GraphTextNodeComponent implements OnInit {
         })
         .onNodeClick((node: { type; label; id }) => {
           console.log('Node click-', node.type);
+          if (node.type != 'link') {
+            this.dataService.panelOpenState = !this.dataService.panelOpenState;
+          }
         })
         .onLinkClick((node: { type; label }) => {
           console.log('Node click-', node.type);
@@ -113,7 +127,9 @@ export class D3GraphTextNodeComponent implements OnInit {
       console.log('Registering node');
       if (this.node_tracker.hasOwnProperty(start_node) == false) {
         this.node_tracker[start_node] = true;
-        this.nodes.push(this.all_nodes[start_node]);
+        var current_node = this.all_nodes[start_node];
+        current_node.is_expanded = true;
+        this.nodes.push(current_node);
       }
       this.visited_node[start_node] = true;
 

@@ -1,5 +1,5 @@
 <div class="row" style="margin-top: 10px; margin-left: 8px">
-  <div class="col-xl-6">
+  <div class="col-xl-5">
     <div class="row">
       <div class="col-xl-6">
         <div class="row">
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div> -->
-      <div class="col-xl-6 card-body">
+      <div class="col-xl-6">
         <h3>Choose a topology type</h3>
         <select placeholder="Step By Step" (change)="graphNatureChange($event)">
           <option value="step">Step By Step</option>
@@ -62,7 +62,7 @@
     </div>
     <!-- Search Site Part -->
     <div class="row">
-      <div class="col-xl-6">
+      <div class="col-xl-8">
         <div class="row">
           <div class="col-xl-5">
             <input
@@ -86,16 +86,14 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-6">
+  <div class="col-xl-7">
     <mat-expansion-panel
       (opened)="this.dataService.panelOpenState = true"
       (closed)="this.dataService.panelOpenState = false"
+      [expanded]="this.dataService.panelOpenState"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title> Node Information </mat-panel-title>
-        <mat-panel-description>
-          Panel {{ this.dataService.panelOpenState ? "open" : "closed" }}
-        </mat-panel-description>
+        <mat-panel-title style="color: black"> Utilization </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="exp-body">
         <table
@@ -104,27 +102,48 @@
           class="mat-elevation-z8 demo-table"
         >
           <!-- Position Column -->
-          <ng-container matColumnDef="demo-position">
-            <th mat-header-cell *matHeaderCellDef>Source</th>
-            <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+          <ng-container matColumnDef="source">
+            <th mat-header-cell *matHeaderCellDef>Start Node</th>
+            <td mat-cell *matCellDef="let element">{{ element.source }}</td>
           </ng-container>
 
           <!-- Name Column -->
-          <ng-container matColumnDef="demo-name">
+          <ng-container matColumnDef="interface">
             <th mat-header-cell *matHeaderCellDef>Interface</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.interface }}</td>
           </ng-container>
 
           <!-- Weight Column -->
-          <ng-container matColumnDef="demo-weight">
-            <th mat-header-cell *matHeaderCellDef>Utilization</th>
-            <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef>Time</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.time }}
+            </td>
           </ng-container>
 
           <!-- Symbol Column -->
-          <ng-container matColumnDef="demo-symbol">
-            <th mat-header-cell *matHeaderCellDef>Destination</th>
-            <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+          <ng-container matColumnDef="capacity">
+            <th mat-header-cell *matHeaderCellDef>Capacity</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.capacity }}
+            </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="utilization avg">
+            <th mat-header-cell *matHeaderCellDef>Utilization avg</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.utilization_avg }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="utilization max">
+            <th mat-header-cell *matHeaderCellDef>Utilization max</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.utilization_max }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="target">
+            <th mat-header-cell *matHeaderCellDef>End Node</th>
+            <td mat-cell *matCellDef="let element">{{ element.target }}</td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
