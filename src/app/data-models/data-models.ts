@@ -17,7 +17,7 @@ export interface NodeDataView {
   interface: string;
   bandwidth: number;
 }
-export interface PeriodicElement {
+export interface LinkData {
   source: string;
   interface: string;
   time: string;
@@ -25,4 +25,20 @@ export interface PeriodicElement {
   utilization_avg: string;
   utilization_max: string;
   target: string;
+}
+export interface LinkDataResponse {
+  _id: string;
+  expiredAt: string;
+  siteId?: string | null;
+  LinkName: string;
+  LinkId: string;
+  Interface: string;
+  SiteInterface: string;
+  Region: string;
+  City: string;
+  MwTime: string;
+  Capacity: string;
+  MwUtilizationAvg: string;
+  MwUtilizationMax: string;
+  __v: number;
 }

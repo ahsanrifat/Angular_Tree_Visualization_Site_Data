@@ -1,6 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NodeDataView } from './data-models/data-models';
+import {
+  LinkData,
+  LinkDataResponse,
+  NodeDataView,
+} from './data-models/data-models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +14,8 @@ export class DataServiceService {
   panelOpenState = false;
   current_source: string = null;
   node_data: NodeDataView = null;
+  panel_data = {};
+  panel_current_view_data: Array<LinkData> = [];
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
@@ -23,6 +29,12 @@ export class DataServiceService {
   get_pm_data(site: string) {
     const pm_data = this.http.get(
       `${this.root_url}/network-pmdata/get-data-by-resource-Name?ResourceName=${site}`
+    );
+    return pm_data;
+  }
+  get_link_data(link: string) {
+    const pm_data = this.http.get<Array<LinkDataResponse>>(
+      `http://localhost:9500/EricssonGISIntellegentDatabase/getAllMicrowaveUtilizationData?SiteInterface=${link}`
     );
     return pm_data;
   }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import ForceGraph3D from '3d-force-graph';
 import SpriteText from 'three-spritetext';
 import { DataServiceService } from '../data-service.service';
+import { LinkData, LinkDataResponse } from '../data-models/data-models';
 
 @Component({
   selector: 'app-d3-graph-text-node',
@@ -18,6 +19,8 @@ export class D3GraphTextNodeComponent implements OnInit {
   node_tracker = {};
   visited_node = {};
   link_tracker = {};
+  source_target_dict = {};
+  node_to_node_child = {};
   constructor(public dataService: DataServiceService) {}
 
   ngOnInit(): void {
@@ -41,6 +44,8 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.all_links = data['links_dict'];
       this.all_nodes = data['nodes_dict'];
       this.child_dict = data['child_dict'];
+      this.node_to_node_child = data['node_to_node_child'];
+      this.source_target_dict = data['source_target_dict'];
       this.make_links(this.dataService.current_source);
       var myGraph = ForceGraph3D();
       myGraph(document.getElementById('graph'))
@@ -73,6 +78,7 @@ export class D3GraphTextNodeComponent implements OnInit {
             (node.is_expanded == true ||
               this.child_dict.hasOwnProperty(node.id) != true)
           ) {
+            this.load_link_data(node.id);
             this.dataService.panelOpenState = true;
           }
         });
@@ -84,6 +90,11 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.reset_data();
       this.nodes = data['nodes_arr'];
       this.links = data['links_arr'];
+      this.all_links = data['links_dict'];
+      this.all_nodes = data['nodes_dict'];
+      this.child_dict = data['child_dict'];
+      this.source_target_dict = data['source_target_dict'];
+      this.node_to_node_child = data['node_to_node_child'];
       var myGraph = ForceGraph3D();
       myGraph(document.getElementById('graph'))
         .graphData({ nodes: this.nodes, links: this.links })
@@ -112,6 +123,59 @@ export class D3GraphTextNodeComponent implements OnInit {
       myGraph.d3Force('charge').strength(-120);
     }
   }
+  load_link_data(node_id) {
+    if (this.dataService.panel_data.hasOwnProperty(node_id)) {
+      this.dataService.panel_current_view_data =
+        this.dataService.panel_data[node_id];
+      console.log('Panel_data ->', this.dataService.panel_current_view_data);
+    } else {
+      this.dataService.panel_data[node_id] = [];
+      if (this.node_to_node_child.hasOwnProperty(node_id)) {
+        var child_arr = this.node_to_node_child[node_id];
+        child_arr = [...new Set(child_arr)];
+        console.log('child_arr->', child_arr);
+        for (var child of child_arr) {
+          console.log('Child->', child);
+          var label = node_id + '=>' + child;
+          console.log('Label->', label);
+          var link = this.source_target_dict[label];
+          console.log('Link->', link);
+          var search_str = node_id + ' - ' + link['linkA'];
+          this.dataService.get_link_data(search_str).subscribe((data) => {
+            console.log('load_link_data->', data);
+            if (data.length == 0) {
+              console.log('Link2->', link);
+              this.dataService.panel_data[node_id].push({
+                source: node_id,
+                interface: link['linkA'],
+                time: 'N/A',
+                capacity: 'N/A',
+                utilization_avg: 'N/A',
+                utilization_max: 'N/A',
+                target: child + `(${link['linkB']})`,
+              });
+            }
+            if (data.length > 1) {
+              var info: LinkDataResponse = data[0];
+              this.dataService.panel_data[node_id].push({
+                source: node_id,
+                interface: link['linkA'],
+                time: info.MwTime,
+                capacity: info.Capacity,
+                utilization_avg: info.MwUtilizationAvg,
+                utilization_max: info.MwUtilizationMax,
+                target: child + `(${link['linkB']})`,
+              });
+            }
+          });
+        }
+
+        this.dataService.panel_current_view_data =
+          this.dataService.panel_data[node_id];
+        console.log('Panel Data->', this.dataService.panel_current_view_data);
+      }
+    }
+  }
   reset_data() {
     this.all_nodes = {};
     this.all_links = {};
@@ -121,6 +185,8 @@ export class D3GraphTextNodeComponent implements OnInit {
     this.link_tracker = {};
     this.nodes = [];
     this.links = [];
+    this.source_target_dict = {};
+    this.node_to_node_child = {};
   }
   make_links(start_node) {
     if (this.visited_node.hasOwnProperty(start_node) == false) {
