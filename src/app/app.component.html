@@ -119,8 +119,8 @@
             <td>{{ item.interface }}</td>
             <td>{{ item.time }}</td>
             <td>{{ item.capacity }}</td>
-            <td>{{ item.utilization_avg }}</td>
-            <td>{{ item.utilization_max }}</td>
+            <td>{{ item.utilization_avg | number: "1.0-2" }}%</td>
+            <td>{{ item.utilization_max | number: "1.0-2" }}%</td>
             <td>{{ item.target }}</td>
           </tr>
         </table>

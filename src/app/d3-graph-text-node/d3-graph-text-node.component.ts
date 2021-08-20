@@ -50,10 +50,12 @@ export class D3GraphTextNodeComponent implements OnInit {
       var myGraph = ForceGraph3D();
       myGraph(document.getElementById('graph'))
         .graphData({ nodes: this.nodes, links: this.links })
+        .backgroundColor('#FFFFFF')
         .nodeLabel('label')
         .nodeColor('color')
         .linkWidth(1)
         .nodeVal(5)
+        .linkColor('color')
         .linkDirectionalArrowLength(12)
         .linkDirectionalArrowRelPos(1)
         .linkLabel('type')
@@ -97,24 +99,29 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.node_to_node_child = data['node_to_node_child'];
       var myGraph = ForceGraph3D();
       myGraph(document.getElementById('graph'))
+        .backgroundColor('#FFFFFF')
         .graphData({ nodes: this.nodes, links: this.links })
         .nodeLabel('label')
         .nodeColor('color')
+        // .nodeAutoColorBy('type')
         .linkWidth(1)
         .nodeVal(5)
         .linkDirectionalArrowLength(12)
         .linkDirectionalArrowRelPos(1)
         .linkLabel('type')
+        .linkColor('color')
         .nodeThreeObject((node) => {
           const sprite = new SpriteText(node.label);
           sprite.color = node.color;
           sprite.textHeight = 8;
+          sprite.fontWeight = 'bold';
           return sprite;
         })
         .onNodeClick((node: { type; label; id }) => {
           console.log('Node click-', node.type);
           if (node.type != 'link') {
-            this.dataService.panelOpenState = !this.dataService.panelOpenState;
+            this.load_link_data(node.id);
+            this.dataService.panelOpenState = true;
           }
         })
         .onLinkClick((node: { type; label }) => {
@@ -122,6 +129,18 @@ export class D3GraphTextNodeComponent implements OnInit {
         });
       myGraph.d3Force('charge').strength(-120);
     }
+  }
+  get_link_data(search_str, link, child, callback) {
+    this.dataService.get_link_data(search_str).subscribe((data) => {
+      console.log('promise_data->', data);
+      callback({ data: data, link: link, child: child });
+    });
+    // return new Promise((resolve) => {
+    //   this.dataService.get_link_data(search_str).subscribe((data) => {
+    //     console.log('promise_data->', data);
+    //     return resolve({ data: data, link: link });
+    //   });
+    // });
   }
   load_link_data(node_id) {
     if (this.dataService.panel_data.hasOwnProperty(node_id)) {
@@ -135,44 +154,59 @@ export class D3GraphTextNodeComponent implements OnInit {
         child_arr = [...new Set(child_arr)];
         console.log('child_arr->', child_arr);
         for (var child of child_arr) {
+          var link = null;
           console.log('Child->', child);
           var label = node_id + '=>' + child;
-          console.log('Label->', label);
-          var link = this.source_target_dict[label];
+          link = this.source_target_dict[label];
           console.log('Link->', link);
           var search_str = node_id + ' - ' + link['linkA'];
-          this.dataService.get_link_data(search_str).subscribe((data) => {
-            console.log('load_link_data->', data);
-            if (data.length == 0) {
-              console.log('Link2->', link);
-              this.dataService.panel_data[node_id].push({
-                source: node_id,
-                interface: link['linkA'],
-                time: 'N/A',
-                capacity: 'N/A',
-                utilization_avg: 'N/A',
-                utilization_max: 'N/A',
-                target: child + `(${link['linkB']})`,
-              });
+          this.get_link_data(
+            search_str,
+            link,
+            child,
+            (data1: {
+              data: Array<LinkDataResponse>;
+              link: any;
+              child: any;
+            }) => {
+              console.log('get_link_data->', data1);
+              var data = data1['data'];
+              var li = data1['link'];
+              var ch = data1['child'];
+              console.log('got promise data', li);
+              if (data.length == 0) {
+                var store = {
+                  source: node_id,
+                  interface: li['linkA'],
+                  time: 'N/A',
+                  capacity: 'N/A',
+                  utilization_avg: 'N/A',
+                  utilization_max: 'N/A',
+                  target: ch + `(${li['linkB']})`,
+                };
+                this.dataService.panel_data[node_id].push(store);
+              }
+              if (data.length > 1) {
+                var info: LinkDataResponse = data[0];
+                this.dataService.panel_data[node_id].push({
+                  source: node_id,
+                  interface: li['linkA'],
+                  time: info.MwTime,
+                  capacity: info.Capacity,
+                  utilization_avg: info.MwUtilizationAvg,
+                  utilization_max: info.MwUtilizationMax,
+                  target: ch + `(${li['linkB']})`,
+                });
+              }
+              this.dataService.panel_current_view_data =
+                this.dataService.panel_data[node_id];
+              console.log(
+                'Panel Data->',
+                this.dataService.panel_current_view_data
+              );
             }
-            if (data.length > 1) {
-              var info: LinkDataResponse = data[0];
-              this.dataService.panel_data[node_id].push({
-                source: node_id,
-                interface: link['linkA'],
-                time: info.MwTime,
-                capacity: info.Capacity,
-                utilization_avg: info.MwUtilizationAvg,
-                utilization_max: info.MwUtilizationMax,
-                target: child + `(${link['linkB']})`,
-              });
-            }
-          });
+          );
         }
-
-        this.dataService.panel_current_view_data =
-          this.dataService.panel_data[node_id];
-        console.log('Panel Data->', this.dataService.panel_current_view_data);
       }
     }
   }
@@ -187,6 +221,7 @@ export class D3GraphTextNodeComponent implements OnInit {
     this.links = [];
     this.source_target_dict = {};
     this.node_to_node_child = {};
+    this.dataService.panel_data = {};
   }
   make_links(start_node) {
     if (this.visited_node.hasOwnProperty(start_node) == false) {
