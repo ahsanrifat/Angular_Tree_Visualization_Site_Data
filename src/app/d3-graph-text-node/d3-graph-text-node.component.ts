@@ -21,11 +21,31 @@ export class D3GraphTextNodeComponent implements OnInit {
   link_tracker = {};
   source_target_dict = {};
   node_to_node_child = {};
+  is_api_loading = false;
+  invalid_graph = false;
   constructor(public dataService: DataServiceService) {}
 
   ngOnInit(): void {
     try {
       // console.log('D3 Test started');
+      this.dataService.api_loading.subscribe((data) => {
+        if (data == false) {
+          this.is_api_loading = false;
+        } else {
+          this.is_api_loading = true;
+        }
+        console.log('is_api_loading', this.is_api_loading);
+      });
+      this.dataService.search_btn_clicked.subscribe((data) => {
+        this.reset_data();
+        var myGraph = ForceGraph3D();
+        myGraph(document.getElementById('graph'))
+          .graphData({
+            nodes: [],
+            links: [],
+          })
+          .backgroundColor('#FFFFFF');
+      });
       this.graph_data.subscribe((data) => {
         // console.log('D3 Text->', data);
         if (this.dataService.graph_type == 'step') {
@@ -51,7 +71,7 @@ export class D3GraphTextNodeComponent implements OnInit {
         this.child_dict = data['child_dict'];
         this.node_to_node_child = data['node_to_node_child'];
         this.source_target_dict = data['source_target_dict'];
-        this.make_links(this.dataService.current_source);
+        this.make_links(data['source_node']);
         var myGraph = ForceGraph3D();
         myGraph(document.getElementById('graph'))
           .graphData({ nodes: this.nodes, links: this.links })
@@ -90,6 +110,8 @@ export class D3GraphTextNodeComponent implements OnInit {
             }
           });
         myGraph.d3Force('charge').strength(-120);
+      } else {
+        this.invalid_graph = true;
       }
     } catch (err) {
       console.log('Exception->(make_setp_wise_graph)', err);
@@ -140,6 +162,8 @@ export class D3GraphTextNodeComponent implements OnInit {
             console.log('Node click-', node.type);
           });
         myGraph.d3Force('charge').strength(-120);
+      } else {
+        this.invalid_graph = true;
       }
     } catch (err) {
       console.log('Exception->(make_full_graph)', err);
@@ -230,6 +254,9 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.source_target_dict = {};
       this.node_to_node_child = {};
       this.dataService.panel_data = {};
+      this.dataService.panel_current_view_data = [];
+      this.is_api_loading = false;
+      this.invalid_graph = false;
     } catch (err) {
       console.log('Exception->(reset_data)', err);
     }

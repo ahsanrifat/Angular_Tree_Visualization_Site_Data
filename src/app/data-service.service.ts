@@ -11,11 +11,13 @@ import {
 })
 export class DataServiceService {
   api_loading = new EventEmitter<boolean>();
+  search_btn_clicked = new EventEmitter<boolean>();
   panelOpenState = false;
   current_source: string = null;
   node_data: NodeDataView = null;
   panel_data = {};
   panel_current_view_data: Array<LinkData> = [];
+  is_topology_loading=false;
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
@@ -32,6 +34,7 @@ export class DataServiceService {
     );
     return pm_data;
   }
+  // utilization data
   get_link_data(link: string) {
     const pm_data = this.http.get<Array<LinkDataResponse>>(
       `http://localhost:9500/EricssonGISIntellegentDatabase/getAllMicrowaveUtilizationData?SiteInterface=${link}`

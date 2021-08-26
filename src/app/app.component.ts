@@ -38,12 +38,19 @@ export class AppComponent {
   }
 
   showGraph(site_name) {
-    this.dataService.test_api(site_name).subscribe((data: []) => {
-      this.dataService.panel_current_view_data = [];
-      this.dataService.current_source = site_name;
-      this.graph_data.emit(data);
-      console.log('API Root Data-->', data);
-    });
+    if (site_name.length > 3) {
+      this.dataService.search_btn_clicked.emit(true);
+      this.dataService.is_topology_loading = true;
+      this.dataService.test_api(site_name).subscribe((data: []) => {
+        this.dataService.panel_current_view_data = [];
+        this.dataService.current_source = site_name;
+        this.graph_data.emit(data);
+        this.dataService.is_topology_loading = false;
+        console.log('API Root Data-->', data);
+      });
+    } else {
+      alert('Search node must comtain at least 4 characters!');
+    }
   }
   graphChange(event) {
     this.graph_type = event.target.value;

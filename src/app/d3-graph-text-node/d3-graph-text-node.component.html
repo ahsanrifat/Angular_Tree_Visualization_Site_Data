@@ -1,1 +1,11 @@
+<h2
+  class=""
+  style="text-align: center; margin-top: 30px"
+  *ngIf="this.dataService.is_topology_loading"
+>
+  Topology Data Loading...
+</h2>
+<h2 class="" style="text-align: center; margin-top: 30px" *ngIf="invalid_graph">
+  No Topology Found!
+</h2>
 <div id="graph"></div>
