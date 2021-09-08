@@ -60,20 +60,72 @@
         </select>
       </div>
     </div>
+    <!-- Region select part -->
+    <div class="row" style="margin-left: 5px">
+      <div class="col-xl-3 padding_0">
+        <select
+          class="reg_sel"
+          (change)="onRegionSelect($event)"
+          style="width: 100px; height: 30px"
+        >
+          <option selected disabled>Region</option>
+          <option value="Centeral">Centeral</option>
+          <option value="Eastern">Eastern</option>
+          <option value="North">North</option>
+          <option value="West">West</option>
+        </select>
+      </div>
+      <div class="col-xl-3 padding_0">
+        <select
+          class="reg_sel"
+          (change)="onCitySelect($event)"
+          style="width: 100px; height: 30px"
+        >
+          <option selected disabled>City</option>
+          <option *ngFor="let city of city_options" [value]="city">
+            {{ city }}
+          </option>
+        </select>
+      </div>
+      <div class="col-xl-3 padding_0">
+        <select
+          class="reg_sel"
+          (change)="onDataCenterSelect($event)"
+          style="width: 100px; height: 30px"
+        >
+          <option selected disabled>Center</option>
+          <option *ngFor="let center of center_options" [value]="center">
+            {{ center }}
+          </option>
+        </select>
+      </div>
+      <div class="col-xl-3 px-0">
+        <select
+          class="reg_sel"
+          (change)="onNodeSelect($event)"
+          style="width: 160px; height: 30px"
+        >
+          <option selected disabled>Node</option>
+          <option *ngFor="let node of node_options" [value]="node">
+            {{ node }}
+          </option>
+        </select>
+      </div>
+    </div>
     <!-- Search Site Part -->
     <div class="row">
-      <div class="col-xl-8">
-        <div class="row">
-          <div class="col-xl-5">
+      <div class="col-xl-6">
+        <div class="row" style="margin-top: 10px">
+          <div class="col-xl-9">
             <input
               type="text"
               #titleInput
               class="form-control"
-              value="WR-1330-TN01"
+              [value]="selected_node"
             />
             <h6>Example : WR-7080-TN01</h6>
           </div>
-          <div class="col-xl-4">
+          <div class="col-xl-3">
             <button
               mat-raised-button
               color="primary"

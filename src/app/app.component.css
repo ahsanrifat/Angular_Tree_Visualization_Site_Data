@@ -37,3 +37,14 @@ td.mat-footer-cell {
   border-bottom-width: 1px;
   border-bottom-style: solid;
 }
+option {
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: normal !important;
+  white-space: normal;
+}
+.padding_0 {
+  padding-right: 0;
+  padding-left: 0;
+  max-width: 17%;
+}

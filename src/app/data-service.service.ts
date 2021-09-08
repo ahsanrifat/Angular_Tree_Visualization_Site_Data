@@ -17,7 +17,7 @@ export class DataServiceService {
   node_data: NodeDataView = null;
   panel_data = {};
   panel_current_view_data: Array<LinkData> = [];
-  is_topology_loading=false;
+  is_topology_loading = false;
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
@@ -40,5 +40,11 @@ export class DataServiceService {
       `http://localhost:9500/EricssonGISIntellegentDatabase/getAllMicrowaveUtilizationData?SiteInterface=${link}`
     );
     return pm_data;
+  }
+  get_region_data(region: string) {
+    const region_data = this.http.get<[]>(
+      `http://localhost:9500/EricssonGISIntellegentDatabase/getDataCenterTopologyByRegion?Region=${region}`
+    );
+    return region_data;
   }
 }
