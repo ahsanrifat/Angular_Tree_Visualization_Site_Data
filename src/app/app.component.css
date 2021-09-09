@@ -48,3 +48,10 @@ option {
   padding-left: 0;
   max-width: 17%;
 }
+h4 {
+  font: 400 15px/24px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+  margin: 0 0 1px;
+  color: rgb(89, 7, 136);
+  font-size: 14px;
+}
