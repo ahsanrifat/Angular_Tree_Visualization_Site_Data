@@ -21,6 +21,7 @@ import { ApiInterceptor } from './interceptors/api.interceptor';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
+import { AgmCoreModule } from '@agm/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +47,9 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule,
     MatExpansionModule,
     MatTableModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyD5xT4mLCRpIux2TnrodKNJll9LVME23SI',
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

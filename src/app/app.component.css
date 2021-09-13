@@ -59,3 +59,10 @@ h4 {
   font-weight: bold;
   color: #7b1fa2;
 }
+agm-map {
+  height: 200px;
+}
+.node-map {
+  cursor: pointer;
+  color: #000;
+}

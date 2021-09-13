@@ -64,67 +64,25 @@
         </select>
       </div>
     </div>
-    <!-- Region select part -->
-    <div class="row" style="margin-left: 5px">
-      <div class="col-xl-3 padding_0">
-        <h4>Region</h4>
-        <select
-          class="reg_sel"
-          (change)="onRegionSelect($event)"
-          style="width: 100px; height: 30px"
-        >
-          <option selected disabled>Region</option>
-          <option value="Centeral">Centeral</option>
-          <option value="Eastern">Eastern</option>
-          <option value="North">North</option>
-          <option value="West">West</option>
-        </select>
-      </div>
-      <div class="col-xl-3 padding_0">
-        <h4>City</h4>
-        <select
-          class="reg_sel"
-          (change)="onCitySelect($event)"
-          style="width: 100px; height: 30px"
-        >
-          <option selected disabled>City</option>
-          <option *ngFor="let city of city_options" [value]="city">
-            {{ city }}
-          </option>
-        </select>
-      </div>
-      <div class="col-xl-3 padding_0">
-        <h4>Data Center</h4>
-        <select
-          class="reg_sel"
-          (change)="onDataCenterSelect($event)"
-          style="width: 100px; height: 30px"
-        >
-          <option selected disabled>Center</option>
-          <option *ngFor="let center of center_options" [value]="center">
-            {{ center }}
-          </option>
-        </select>
-      </div>
-      <div class="col-xl-3 px-0">
-        <h4>Node</h4>
-        <select
-          class="reg_sel"
-          (change)="onNodeSelect($event)"
-          style="width: 160px; height: 30px"
-        >
-          <option selected disabled>Node</option>
-          <option *ngFor="let node of node_options" [value]="node">
-            {{ node }}
-          </option>
-        </select>
-      </div>
-    </div>
     <!-- Search Site Part -->
     <div class="row">
-      <div class="col-xl-6">
+      <div class="col-xl-12">
         <div class="row" style="margin-top: 10px">
-          <div class="col-xl-9">
+          <div class="col-xl-3">
+            <h4>Region</h4>
+            <select
+              class="reg_sel"
+              (change)="onRegionSelect($event)"
+              style="width: 100px; height: 30px"
+            >
+              <option selected disabled>Region</option>
+              <option value="Centeral">Centeral</option>
+              <option value="Eastern">Eastern</option>
+              <option value="North">North</option>
+              <option value="West">West</option>
+            </select>
+          </div>
+          <div class="col-xl-4" style="margin-top: 18px">
             <input
               type="text"
               #titleInput
@@ -133,7 +91,7 @@
             />
             <h6>Example : WR-7080-TN01</h6>
           </div>
-          <div class="col-xl-3">
+          <div class="col-xl-3" style="margin-top: 18px">
             <button
               mat-raised-button
               color="primary"
@@ -190,6 +148,42 @@
 </div>
 
 <!-- <app-optional-graph></app-optional-graph> -->
+<button mat-raised-button (click)="mapToggle()" style="margin: 10px">
+  {{ this.show_map_label }}
+</button>
+<agm-map
+  *ngIf="this.show_map"
+  [latitude]="lat"
+  [longitude]="lng"
+  [zoom]="zoom"
+  [disableDefaultUI]="false"
+  (mapClick)="mapClicked($event)"
+  [fitBounds]="true"
+>
+  <agm-marker
+    *ngFor="let m of markers; let i = index"
+    (markerClick)="clickedMarker(m.label, i)"
+    [latitude]="m.lat"
+    [longitude]="m.lng"
+    [label]="m.label"
+    [markerDraggable]="m.draggable"
+    [agmFitBounds]="true"
+    (dragEnd)="markerDragEnd(m, $event)"
+    modelsbyref="false"
+  >
+    <agm-info-window>
+      Site List
+      <hr />
+      <div
+        class="node-map"
+        (click)="mapNodeClicked(node)"
+        *ngFor="let node of node_array_map"
+      >
+        {{ node }}
+      </div>
+    </agm-info-window>
+  </agm-marker>
+</agm-map>
 <div>
   <app-ngx-graph-fd
     *ngIf="graph_type == 'ngx-forced'"

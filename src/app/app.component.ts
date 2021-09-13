@@ -15,7 +15,63 @@ export class AppComponent {
   graph_data = new EventEmitter<[]>();
   option: any[] = [];
   show_loading = false;
-
+  show_map_popup = false;
+  // initial center position for the map
+  lat: number = 23.8859;
+  lng: number = 45.0792;
+  zoom: number = 8;
+  show_map = false;
+  show_map_label = 'Show Map';
+  city_loc_dict = [];
+  data_center_loc = [];
+  node_array_map = [];
+  clickedMarker(label: string, index: number) {
+    const city_name = label;
+    // console.log(`clicked the marker: ${label || index}`);
+    if (this.city_loc_dict.hasOwnProperty(city_name)) {
+      // a city has been clicked
+      console.log('City Clicked->', city_name);
+      this.city_loc_dict = [];
+      this.markers = [];
+      if (!this.data_center_loc.hasOwnProperty(city_name)) {
+        this.data_center_loc[city_name] = true;
+        for (var obj of this.region_data) {
+          if (obj['City'] == city_name) {
+            this.data_center_loc[obj['DataCenter']] = true;
+            this.markers.push({
+              lat: obj['DataCenterLaitude'],
+              lng: obj['DataCenterLongitude'],
+              label: obj['DataCenter'],
+              draggable: false,
+            });
+          }
+        }
+      }
+    } else if (this.data_center_loc.hasOwnProperty(city_name)) {
+      // its a datacenter
+      const center = label;
+      console.log('Data Center->', center);
+      this.show_map_popup = true;
+      for (var obj of this.region_data) {
+        if (obj['DataCenter'] == center) {
+          this.node_array_map.push(obj['NodeName']);
+        }
+      }
+      console.log('Node Array->', this.node_array_map);
+    }
+  }
+  mapNodeClicked(node) {
+    // this.dataService.node_map_click.emit(node);
+    console.log(node);
+    this.showGraph(node);
+  }
+  markerDragEnd(m: marker, $event) {
+    console.log('dragEnd', m, $event);
+  }
+  mapClicked($event) {
+    console.log($event);
+  }
+  markers: marker[] = [];
   displayedColumns: string[] = [
     'source',
     'interface',
@@ -41,7 +97,14 @@ export class AppComponent {
       }
     });
   }
-
+  mapToggle() {
+    this.show_map = !this.show_map;
+    if (this.show_map) {
+      this.show_map_label = 'Hide Map';
+    } else {
+      this.show_map_label = 'Show Map';
+    }
+  }
   showGraph(site_name) {
     if (site_name.length > 3) {
       this.dataService.search_btn_clicked.emit(true);
@@ -64,8 +127,20 @@ export class AppComponent {
       this.region_data = data;
       let city = new Set();
       for (var obj of data) {
-        city.add(obj['City']);
+        const city_name = obj['City'];
+        city.add(city_name);
+        if (!this.city_loc_dict.hasOwnProperty(city_name)) {
+          this.city_loc_dict[city_name] = true;
+          this.markers.push({
+            lat: obj['Latitude'],
+            lng: obj['Longitude'],
+            label: city_name,
+            draggable: false,
+          });
+        }
       }
+      this.show_map = true;
+      this.show_map_label = 'Hide Map';
       this.city_options = Array.from(city.values());
       this.city_options.splice(0, 0, '--');
       this.center_options = ['--'];
@@ -119,4 +194,11 @@ export class AppComponent {
       this.option = ['2G', '3G', '4G'];
     }
   }
+}
+// just an interface for type safety.
+interface marker {
+  lat: number;
+  lng: number;
+  label?: string;
+  draggable: boolean;
 }

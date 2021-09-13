@@ -12,6 +12,7 @@ import {
 export class DataServiceService {
   api_loading = new EventEmitter<boolean>();
   search_btn_clicked = new EventEmitter<boolean>();
+  node_map_click = new EventEmitter<boolean>();
   panelOpenState = false;
   current_source: string = null;
   node_data: NodeDataView = null;
