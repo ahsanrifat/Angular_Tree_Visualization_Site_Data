@@ -25,6 +25,7 @@ export class AppComponent {
   city_loc_dict = [];
   data_center_loc = [];
   node_array_map = [];
+  map_site_list_label = 'Site List';
   clickedMarker(label: string, index: number) {
     const city_name = label;
     // console.log(`clicked the marker: ${label || index}`);
@@ -35,6 +36,8 @@ export class AppComponent {
       this.markers = [];
       if (!this.data_center_loc.hasOwnProperty(city_name)) {
         this.data_center_loc[city_name] = true;
+        this.node_array_map = [];
+        let is_set_label = false;
         for (var obj of this.region_data) {
           if (obj['City'] == city_name) {
             this.data_center_loc[obj['DataCenter']] = true;
@@ -50,6 +53,7 @@ export class AppComponent {
     } else if (this.data_center_loc.hasOwnProperty(city_name)) {
       // its a datacenter
       const center = label;
+      this.map_site_list_label = label + '- Site List';
       console.log('Data Center->', center);
       this.show_map_popup = true;
       for (var obj of this.region_data) {
@@ -63,6 +67,7 @@ export class AppComponent {
   mapNodeClicked(node) {
     // this.dataService.node_map_click.emit(node);
     console.log(node);
+    this.selected_node = node;
     this.showGraph(node);
   }
   markerDragEnd(m: marker, $event) {
@@ -107,6 +112,8 @@ export class AppComponent {
   }
   showGraph(site_name) {
     if (site_name.length > 3) {
+      this.show_map = false;
+      this.show_map_label = 'Show Map';
       this.dataService.search_btn_clicked.emit(true);
       this.dataService.is_topology_loading = true;
       this.dataService.test_api(site_name).subscribe((data: []) => {

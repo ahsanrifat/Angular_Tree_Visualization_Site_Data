@@ -1,74 +1,10 @@
 <div class="row" style="margin-top: 10px; margin-left: 8px">
   <div class="col-xl-5">
-    <div class="row">
-      <div class="col-xl-6">
-        <div class="row">
-          <div class="col-xl-8">
-            <h2 class="project_title">Topology Explorer</h2>
-          </div>
-          <div class="col-xl-4">
-            <mat-spinner *ngIf="show_loading" diameter="30"></mat-spinner>
-          </div>
-        </div>
-
-        <!-- <select (change)="graphChange($event)">
-              <option value="d3-3d-graph-text">D3 3D Graph Text Node</option>
-              <option value="ngx-forced">ngx-graph forced directed</option>
-              <option value="d3-3d-graph-bubble">D3 3D Graph Bubble</option></select
-            ><br /><br /> -->
-      </div>
-      <!-- Voice Data select for msc topology -->
-      <!-- <div class="col-xl-4">
-        <div class="row">
-          <div class="col-xl-6">
-            <h3>Voice/Data :</h3>
-            <div class="select">
-              <select
-                name="format"
-                id="format"
-                #op1
-                (change)="on_option_select(op1.value)"
-              >
-                <option selected="selected" disabled="disabled">
-                  Select Option
-                </option>
-                <option value="Voice">Voice</option>
-                <option value="Data">Data</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-xl-6">
-            <h3>Type :</h3>
-            <div class="select">
-              <select name="format" id="format">
-                <option selected="selected" disabled="disabled">
-                  Select Option
-                </option>
-                <option *ngFor="let op of option" [value]="op">
-                  {{ op }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <div class="col-xl-6">
-        <h4>Choose a topology type</h4>
-        <select
-          placeholder="Step By Step"
-          (change)="graphNatureChange($event)"
-          style="width: 130px; height: 30px"
-        >
-          <option value="step">Step By Step</option>
-          <option value="no_step">Full Graph</option>
-        </select>
-      </div>
-    </div>
     <!-- Search Site Part -->
     <div class="row">
       <div class="col-xl-12">
-        <div class="row" style="margin-top: 10px">
-          <div class="col-xl-3">
+        <div class="row" style="margin-top: 2px">
+          <div class="col-xl-3 close_col_gap">
             <h4>Region</h4>
             <select
               class="reg_sel"
@@ -91,7 +27,7 @@
             />
             <h6>Example : WR-7080-TN01</h6>
           </div>
-          <div class="col-xl-3" style="margin-top: 18px">
+          <div class="col-xl-2" style="margin-top: 18px; max-width: 15%">
             <button
               mat-raised-button
               color="primary"
@@ -99,6 +35,17 @@
             >
               Search
             </button>
+          </div>
+          <div class="col-xl-3 close_col_gap">
+            <h4>Topology type</h4>
+            <select
+              placeholder="Step By Step"
+              (change)="graphNatureChange($event)"
+              style="width: 130px; height: 30px"
+            >
+              <option value="step">Step By Step</option>
+              <option value="no_step">Full Graph</option>
+            </select>
           </div>
         </div>
       </div>
@@ -171,8 +118,8 @@
     (dragEnd)="markerDragEnd(m, $event)"
     modelsbyref="false"
   >
-    <agm-info-window>
-      Site List
+    <agm-info-window style="width: 80px">
+      {{ map_site_list_label }}
       <hr />
       <div
         class="node-map"

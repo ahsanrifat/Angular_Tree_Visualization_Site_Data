@@ -60,9 +60,13 @@ h4 {
   color: #7b1fa2;
 }
 agm-map {
-  height: 200px;
+  height: 300px;
 }
 .node-map {
   cursor: pointer;
   color: #000;
+}
+.close_col_gap {
+  flex: 0 0 25%;
+  max-width: 19%;
 }
