@@ -18,6 +18,8 @@ export class DataServiceService {
   node_data: NodeDataView = null;
   panel_data = {};
   panel_current_view_data: Array<LinkData> = [];
+  panel_pm_data = {};
+  panel_current_pm_data = [];
   is_topology_loading = false;
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
