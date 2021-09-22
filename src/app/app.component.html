@@ -51,45 +51,70 @@
       </div>
     </div>
   </div>
-  <!-- Utilization panel -->
-  <div class="col-xl-7">
+</div>
+<!-- Utilization and PM data panel -->
+<div class="row">
+  <div class="col-xl-12">
     <mat-expansion-panel
       (opened)="this.dataService.panelOpenState = true"
       (closed)="this.dataService.panelOpenState = false"
       [expanded]="this.dataService.panelOpenState"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title style="color: black"> Utilization </mat-panel-title>
+        <mat-panel-title style="color: black">
+          Utilization & PM Data
+          <span
+            style="margin-left: 500px; color: rgb(88, 88, 226)"
+            *ngIf="this.dataService.loading_utilization"
+            >Loading . . .</span
+          >
+        </mat-panel-title>
       </mat-expansion-panel-header>
       <!-- this.dataService.panel_current_view_data | json -->
       <div class="exp-body">
-        <table>
-          <tr>
-            <th>No.</th>
-            <th>Source</th>
-            <th>Interface</th>
-            <th>Time</th>
-            <th>Capacity</th>
-            <th>Utilization Avg</th>
-            <th>Utilization Max</th>
-            <th>Target</th>
-          </tr>
-          <tr
-            *ngFor="
-              let item of this.dataService.panel_current_view_data;
-              let i = index
-            "
-          >
-            <td>{{ i + 1 }}</td>
-            <td>{{ item.source }}</td>
-            <td>{{ item.interface }}</td>
-            <td>{{ item.time }}</td>
-            <td>{{ item.capacity }}</td>
-            <td>{{ item.utilization_avg | number: "1.0-2" }}%</td>
-            <td>{{ item.utilization_max | number: "1.0-2" }}%</td>
-            <td>{{ item.target }}</td>
-          </tr>
-        </table>
+        <div class="row">
+          <div class="col-xl-12">
+            <table>
+              <tr>
+                <th>No.</th>
+                <th>Source</th>
+                <th>Interface</th>
+                <th>Time</th>
+                <th>Capacity</th>
+                <th>Utilization Avg</th>
+                <th>Utilization Max</th>
+                <th>Target</th>
+                <th>Bandwidth</th>
+                <th>Utilization</th>
+                <th>Inbound</th>
+                <th>Outbound</th>
+              </tr>
+              <tr
+                *ngFor="
+                  let item of this.dataService.panel_current_view_data;
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.source }}</td>
+                <td>{{ item.interface }}</td>
+                <td>{{ item.time }}</td>
+                <td>{{ item.capacity }}</td>
+                <td>{{ item.utilization_avg | number: "1.0-2" }}%</td>
+                <td>{{ item.utilization_max | number: "1.0-2" }}%</td>
+                <td>{{ item.target }}</td>
+                <td>{{ item.bandwidth }}</td>
+                <td>
+                  <span [ngClass]="getUtilizationColor(item.utilization)">{{
+                    item.utilization
+                  }}</span>
+                </td>
+                <td>{{ item.inbound }}</td>
+                <td>{{ item.outbound }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
     </mat-expansion-panel>
   </div>

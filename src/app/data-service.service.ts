@@ -1,10 +1,6 @@
-import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  LinkData,
-  LinkDataResponse,
-  NodeDataView,
-} from './data-models/data-models';
+import { EventEmitter, Injectable } from '@angular/core';
+import { LinkDataResponse, NodeDataView } from './data-models/data-models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +13,11 @@ export class DataServiceService {
   current_source: string = null;
   node_data: NodeDataView = null;
   panel_data = {};
-  panel_current_view_data: Array<LinkData> = [];
+  panel_current_view_data = [];
   panel_pm_data = {};
   panel_current_pm_data = [];
   is_topology_loading = false;
+  loading_utilization = false;
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}

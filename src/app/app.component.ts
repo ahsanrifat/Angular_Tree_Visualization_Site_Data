@@ -1,8 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
-import * as shape from 'd3-shape';
 import { DataServiceService } from './data-service.service';
-import ForceGraph3D from '3d-force-graph';
-import { LinkData } from './data-models/data-models';
 // import SpriteText from 'three-spritetext';
 @Component({
   selector: 'app-root',
@@ -200,6 +197,26 @@ export class AppComponent {
     } else if ((op1 = '3G')) {
       this.option = ['2G', '3G', '4G'];
     }
+  }
+  getUtilizationColor(utilization_val) {
+    if (utilization_val != '') {
+      const utilization = Number(utilization_val);
+      if (utilization >= 0 && utilization < 70) {
+        // green
+        // '#029e5f';
+        // console.log('Utilization', utilization);
+        return 'uti_green';
+      } else if (utilization >= 70 && utilization < 90) {
+        // orange
+        // '#eb847c';
+        return 'uti_orange';
+      } else if (utilization >= 90) {
+        // red
+        // '#9e0202';
+        return 'uti_red';
+      }
+    }
+    return 'uti';
   }
 }
 // just an interface for type safety.

@@ -70,3 +70,24 @@ agm-map {
   flex: 0 0 25%;
   max-width: 19%;
 }
+.uti_green {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #029e5f;
+  background-color: #029e5f;
+  color: white;
+}
+.uti_orange {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #fe7e44;
+  background-color: #fe7e44;
+  color: white;
+}
+.uti_red {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ff1d1d;
+  background-color: #ff1d1d;
+  color: white;
+}
