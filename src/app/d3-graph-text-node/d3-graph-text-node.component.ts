@@ -20,7 +20,7 @@ export class D3GraphTextNodeComponent implements OnInit {
   node_tracker = {};
   visited_node = {};
   link_tracker = {};
-  pm_data_tracker = {};
+  pm_data = {};
   source_target_dict = {};
   node_to_node_child = {};
   is_api_loading = false;
@@ -69,6 +69,7 @@ export class D3GraphTextNodeComponent implements OnInit {
         data.hasOwnProperty('links_dict')
       ) {
         this.reset_data();
+        this.pm_data = data['pm_data'];
         this.all_links = data['links_dict'];
         this.all_nodes = data['nodes_dict'];
         this.child_dict = data['child_dict'];
@@ -128,13 +129,14 @@ export class D3GraphTextNodeComponent implements OnInit {
       console.log('Exception->(make_setp_wise_graph)', err);
     }
   }
-  async make_full_graph(data) {
+  make_full_graph(data) {
     try {
       if (
         data.hasOwnProperty('nodes_arr') &&
         data.hasOwnProperty('links_arr')
       ) {
         this.reset_data();
+        this.pm_data = data['pm_data'];
         this.nodes = data['nodes_arr'];
         this.links = data['links_arr'];
         this.all_links = data['links_dict'];
@@ -190,122 +192,18 @@ export class D3GraphTextNodeComponent implements OnInit {
     }
   }
   search_pm_data(pm_data_param) {
-    return new Promise((resolve, reject) => {
-      try {
-        let resolve_data = {};
-        console.log('Calling pm data function');
-        this.dataService.get_pm_data(pm_data_param).subscribe((pm_data) => {
-          console.log('search_pm_data->', pm_data);
-          if (pm_data.hasOwnProperty('PM_Data')) {
-            let pm_array: any[];
-            pm_array = pm_data['PM_Data'];
-            if (pm_array.length > 0) {
-              resolve_data = pm_array[0];
-            }
-          }
-          resolve(resolve_data);
-        });
-      } catch (err) {
-        console.log('Exception->(search_pm_data)', err);
-        reject(err);
-      }
-    });
-  }
-  get_pm_data_for_all_links_full_graph() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        console.log('Running all links loop');
-        this.loading_pm_data = true;
-        for (var i in this.links) {
-          const link = this.links[i];
-          const pm_label = link['resource_name'];
-          if (pm_label != '') {
-            console.log('PM Label-->', pm_label);
-            if (!this.pm_data_tracker.hasOwnProperty(pm_label)) {
-              const pm_data = await this.search_pm_data(pm_label);
-              if (pm_data.hasOwnProperty('Bandwidth')) {
-                console.log('Got PM Data->', pm_data);
-                const bandwidth = pm_data['Bandwidth'];
-                const inbound = pm_data['Inbound_Bandwidth_Utilization'];
-                const outbound = pm_data['Outbound_Bandwidth_Utilization'];
-                // const utilization = Number(inbound) + Number(outbound);
-                const utilization = 100;
-                if (utilization >= 0 && utilization < 70) {
-                  // green
-                  link['edge_color'] = '#029e5f';
-                  // return_data.color="#029e5f"
-                } else if (utilization >= 70 && utilization < 90) {
-                  // orange
-                  link['edge_color'] = '#eb847c';
-                } else if (utilization >= 90) {
-                  // red
-                  link['edge_color'] = '#9e0202';
-                }
-                link[
-                  'edge_label'
-                ] = `bandwidth:${bandwidth}<br>utilization:${utilization}<br>inbound:${inbound}<br>outbound:${outbound}<br>interface:${pm_label}`;
-              }
-            }
-          }
-        }
-        this.loading_pm_data = false;
-        resolve('Done');
-      } catch (err) {
-        console.log('Exception->(search_pm_data)', err);
-        reject(err);
-      }
-    });
-  }
-  set_pm_data(node_id, resource_name, pm_array) {
     try {
-      // if (!this.dataService.panel_pm_data.hasOwnProperty(node_id)) {
-      //   this.dataService.panel_pm_data[node_id] = [];
-      // }
-      let bandwidth = '';
-      let utilization = '';
-      let inbound = '';
-      let outbound = '';
-      if (pm_array.hasOwnProperty('Bandwidth')) {
-        bandwidth = pm_array['Bandwidth'];
-        inbound = pm_array['Inbound_Bandwidth_Utilization'];
-        outbound = pm_array['Outbound_Bandwidth_Utilization'];
-        utilization = String(Number(inbound) + Number(outbound));
-      }
-      const data = {
-        bandwidth: bandwidth,
-        resource_name: resource_name,
-        inbound: inbound,
-        outbound: outbound,
-        utilization: utilization,
-      };
-      for (let i in this.links) {
-        const link = this.links[i];
-        if (link['resource_name'] == resource_name) {
-          let utilization_data = Number(utilization);
-          if (utilization_data >= 0 && utilization_data < 70) {
-            // green
-            link['edge_color'] = '#029e5f';
-            // return_data.color="#029e5f"
-          } else if (utilization_data >= 70 && utilization_data < 90) {
-            // orange
-            link['edge_color'] = '#eb847c';
-          } else if (utilization_data >= 90) {
-            // red
-            link['edge_color'] = '#9e0202';
-          }
-          link[
-            'edge_label'
-          ] = `bandwidth:${bandwidth}<br>utilization:${utilization}<br>inbound:${inbound}<br>outbound:${outbound}<br>interface:${resource_name}`;
-        }
-      }
-      // console.log('Pushing PM Data-->', data);
-      // this.dataService.panel_pm_data[node_id].push(data);
-      return data;
+      let resolve_data = {};
+      console.log('Calling pm data function');
+      resolve_data = this.pm_data[pm_data_param];
+      console.log('PM data found in pm_data->', resolve_data);
+      return resolve_data;
     } catch (err) {
-      console.log('Exception->(set_pm_data)', err);
-      return '';
+      console.log('Exception->(search_pm_data)', err);
+      return { bandwidth: '', inbound: '', outbound: '', utilization: '' };
     }
   }
+
   get_link_data(node_id, search_str, link, child) {
     return new Promise((resolve, reject) => {
       try {
@@ -313,11 +211,11 @@ export class D3GraphTextNodeComponent implements OnInit {
         // console.log('Utilization Data Search Param->', search_str);
         // console.log('PM Data Data Search Param->', pm_data_param);
         this.dataService.get_link_data(search_str).subscribe(async (data) => {
-          const pm_array = await this.search_pm_data(pm_data_param);
+          const pm_array = this.search_pm_data(pm_data_param);
           // console.log('PM_Data->', pm_data_param, '-->', pm_array);
-          const pm_data = this.set_pm_data(node_id, pm_data_param, pm_array);
+          // const pm_data = this.set_pm_data(node_id, pm_data_param, pm_array);
           // console.log('Utilization_Data->', data);
-          resolve({ data: data, link: link, child: child, pm_data: pm_data });
+          resolve({ data: data, link: link, child: child, pm_data: pm_array });
         });
       } catch (err) {
         console.log('Exception->(get_link_data)', err);
@@ -332,10 +230,6 @@ export class D3GraphTextNodeComponent implements OnInit {
         // setting Utilization data
         this.dataService.panel_current_view_data =
           this.dataService.panel_data[node_id];
-        // setting PM data
-        // this.dataService.panel_current_pm_data =
-        //   this.dataService.panel_pm_data[node_id];
-        // console.log('Panel_data ->', this.dataService.panel_current_view_data);
       } else {
         this.dataService.panel_data[node_id] = [];
         if (this.node_to_node_child.hasOwnProperty(node_id)) {
@@ -398,18 +292,11 @@ export class D3GraphTextNodeComponent implements OnInit {
             // setting utilization data
             this.dataService.panel_current_view_data =
               this.dataService.panel_data[node_id];
-            // setting PM data
-            // this.dataService.panel_current_pm_data =
-            //   this.dataService.panel_pm_data[node_id];
-            // console.log(
-            //   'Panel Data->',
-            //   this.dataService.panel_current_view_data
-            // );
           }
         }
       }
       this.dataService.loading_utilization = false;
-      this.link_data_changed.emit(true);
+      // this.link_data_changed.emit(true);
     } catch (err) {
       console.log('Exception->(load_link_data)', err);
     }
@@ -430,6 +317,7 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.dataService.panel_current_view_data = [];
       this.is_api_loading = false;
       this.invalid_graph = false;
+      this.pm_data = {};
     } catch (err) {
       console.log('Exception->(reset_data)', err);
     }

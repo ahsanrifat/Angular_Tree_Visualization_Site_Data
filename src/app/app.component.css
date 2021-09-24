@@ -80,14 +80,14 @@ agm-map {
 .uti_orange {
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #fe7e44;
-  background-color: #fe7e44;
+  border: 1px solid #ebe131;
+  background-color: #ebe131;
   color: white;
 }
 .uti_red {
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #ff1d1d;
-  background-color: #ff1d1d;
+  border: 1px solid #c51515;
+  background-color: #c51515;
   color: white;
 }

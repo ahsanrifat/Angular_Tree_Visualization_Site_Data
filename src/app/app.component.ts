@@ -109,6 +109,7 @@ export class AppComponent {
   }
   showGraph(site_name) {
     if (site_name.length > 3) {
+      this.dataService.panelOpenState = false;
       this.show_map = false;
       this.show_map_label = 'Show Map';
       this.dataService.search_btn_clicked.emit(true);
@@ -125,6 +126,8 @@ export class AppComponent {
     }
   }
   onRegionSelect(event) {
+    this.dataService.panelOpenState = false;
+    this.dataService.panel_current_view_data = [];
     const region = event.target.value;
     console.log('Region Selected->', region);
     this.dataService.get_region_data(region).subscribe((data) => {
