@@ -200,7 +200,13 @@ export class D3GraphTextNodeComponent implements OnInit {
       return resolve_data;
     } catch (err) {
       console.log('Exception->(search_pm_data)', err);
-      return { bandwidth: '', inbound: '', outbound: '', utilization: '' };
+      return {
+        bandwidth: '',
+        inbound: '',
+        outbound: '',
+        utilization: '',
+        interface_availability: 0,
+      };
     }
   }
 
