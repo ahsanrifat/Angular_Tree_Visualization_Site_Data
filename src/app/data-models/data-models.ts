@@ -42,3 +42,9 @@ export interface LinkDataResponse {
   MwUtilizationMax: string;
   __v: number;
 }
+export interface Marker {
+  lat: number;
+  lng: number;
+  label?: string;
+  draggable: boolean;
+}

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxGraphFdComponent } from './ngx-graph-fd.component';
+import { GraphRootComponent } from './graph-root.component';
 
-describe('NgxGraphFdComponent', () => {
-  let component: NgxGraphFdComponent;
-  let fixture: ComponentFixture<NgxGraphFdComponent>;
+describe('GraphRootComponent', () => {
+  let component: GraphRootComponent;
+  let fixture: ComponentFixture<GraphRootComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NgxGraphFdComponent ]
+      declarations: [ GraphRootComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgxGraphFdComponent);
+    fixture = TestBed.createComponent(GraphRootComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

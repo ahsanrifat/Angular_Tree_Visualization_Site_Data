@@ -28,12 +28,6 @@ export class DataServiceService {
 
     return tree_data;
   }
-  get_pm_data(site: string) {
-    const pm_data = this.http.get(
-      `${this.root_url}/network-pmdata/get-data-by-resource-Name?ResourceName=${site}`
-    );
-    return pm_data;
-  }
   // utilization data
   get_link_data(link: string) {
     const pm_data = this.http.get<Array<LinkDataResponse>>(

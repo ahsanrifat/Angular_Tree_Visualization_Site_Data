@@ -1,9 +1,8 @@
 import ForceGraph3D from '3d-force-graph';
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import SpriteText from 'three-spritetext';
+import * as THREE from 'three';
 import { LinkDataResponse } from '../data-models/data-models';
 import { DataServiceService } from '../data-service.service';
-
 @Component({
   selector: 'app-d3-graph-text-node',
   templateUrl: './d3-graph-text-node.component.html',
@@ -80,21 +79,25 @@ export class D3GraphTextNodeComponent implements OnInit {
         myGraph(document.getElementById('graph'))
           .graphData({ nodes: this.nodes, links: this.links })
           .backgroundColor('#FFFFFF')
-          // .nodeLabel('label')
+          .nodeLabel('label')
           .nodeColor('color')
-          .linkWidth(1.5)
-          // .linkOpacity(0.4)
-          .nodeVal(5)
+          .linkWidth(1)
+          .linkOpacity(0.8)
           .linkColor('edge_color')
-          .linkDirectionalArrowLength(12)
-          .linkDirectionalArrowRelPos(1)
+          // .linkDirectionalArrowLength(12)
+          // .linkDirectionalArrowRelPos(1)
           .linkLabel('edge_label')
           .nodeThreeObject((node) => {
-            const sprite = new SpriteText(
-              node.label.replace('GigabitEthernet', '')
+            const imgTexture = new THREE.TextureLoader().load(
+              'assets/tower1.png'
             );
-            sprite.color = node.color;
-            sprite.textHeight = 8;
+            const material = new THREE.SpriteMaterial({ map: imgTexture });
+            let sprite = new THREE.Sprite(material);
+            sprite.scale.set(12, 12);
+            // return sprite;
+            // sprite = new SpriteText(node.label.replace('GigabitEthernet', ''));
+            // sprite.color = node.color;
+            // sprite.textHeight = 8;
             return sprite;
           })
           .onNodeClick((node: { type; label; id; is_expanded }) => {
@@ -148,22 +151,27 @@ export class D3GraphTextNodeComponent implements OnInit {
         myGraph(document.getElementById('graph'))
           .backgroundColor('#FFFFFF')
           .graphData({ nodes: this.nodes, links: this.links })
-          // .nodeLabel('label')
+          .nodeLabel('label')
           .nodeColor('color')
-          .linkWidth(1.5)
-          // .linkOpacity(0.4)
-          .nodeVal(5)
-          .linkDirectionalArrowLength(12)
-          .linkDirectionalArrowRelPos(1)
+          .linkWidth(1)
+          .linkOpacity(0.8)
+          // .linkDirectionalArrowLength(12)
+          // .linkDirectionalArrowRelPos(1)
           .linkLabel('edge_label')
           .linkColor('edge_color')
           .nodeThreeObject((node) => {
-            const sprite = new SpriteText(
-              node.label.replace('GigabitEthernet', '')
+            const imgTexture = new THREE.TextureLoader().load(
+              'assets/tower1.png'
             );
-            sprite.color = node.color;
-            sprite.textHeight = 8;
-            sprite.fontWeight = 'bold';
+            const material = new THREE.SpriteMaterial({ map: imgTexture });
+            let sprite = new THREE.Sprite(material);
+            sprite.scale.set(15, 15);
+            // const sprite = new SpriteText(
+            //   node.label.replace('GigabitEthernet', '')
+            // );
+            // sprite.color = node.color;
+            // sprite.textHeight = 8;
+            // sprite.fontWeight = 'bold';
             return sprite;
           })
           .onNodeClick((node: { type; label; id }) => {
@@ -176,7 +184,7 @@ export class D3GraphTextNodeComponent implements OnInit {
           .onLinkClick((node: { type; label }) => {
             console.log('Node click-', node.type);
           });
-        myGraph.d3Force('charge').strength(-120);
+        myGraph.d3Force('charge').strength(-180);
         // await this.get_pm_data_for_all_links_full_graph();
         this.link_data_changed.subscribe((data) => {
           if (this.dataService.graph_type == 'no_step') {
@@ -192,21 +200,25 @@ export class D3GraphTextNodeComponent implements OnInit {
     }
   }
   search_pm_data(pm_data_param) {
+    let resolve_data = {
+      bandwidth: '',
+      inbound: '',
+      outbound: '',
+      utilization: '',
+      interface_availability: 0,
+    };
     try {
-      let resolve_data = {};
       console.log('Calling pm data function');
-      resolve_data = this.pm_data[pm_data_param];
-      console.log('PM data found in pm_data->', resolve_data);
-      return resolve_data;
+      if (this.pm_data.hasOwnProperty(pm_data_param)) {
+        resolve_data = this.pm_data[pm_data_param];
+        console.log('PM data found in pm_data->', resolve_data);
+        return resolve_data;
+      } else {
+        return resolve_data;
+      }
     } catch (err) {
       console.log('Exception->(search_pm_data)', err);
-      return {
-        bandwidth: '',
-        inbound: '',
-        outbound: '',
-        utilization: '',
-        interface_availability: 0,
-      };
+      return resolve_data;
     }
   }
 
@@ -260,7 +272,6 @@ export class D3GraphTextNodeComponent implements OnInit {
             let li = data1['link'];
             let ch = data1['child'];
             let pm_data = data1['pm_data'];
-            console.log('got promise data PM Data', pm_data);
             if (data.length == 0) {
               var store = {
                 source: node_id,
@@ -270,16 +281,21 @@ export class D3GraphTextNodeComponent implements OnInit {
                 utilization_avg: 'N/A',
                 utilization_max: 'N/A',
                 target: ch + `(${li['linkB']})`,
-                bandwidth: pm_data['bandwidth'],
-                resource_name: pm_data['resource_name'],
-                inbound: pm_data['inbound'],
-                outbound: pm_data['outbound'],
-                utilization: pm_data['utilization'],
+                bandwidth: pm_data?.bandwidth ? pm_data['bandwidth'] : 'N/A',
+                resource_name: pm_data?.resource_name
+                  ? pm_data['resource_name']
+                  : 'N/A',
+                inbound: pm_data?.inbound ? pm_data['inbound'] : 'N/A',
+                outbound: pm_data?.outbound ? pm_data['outbound'] : 'N/A',
+                utilization: pm_data?.utilization
+                  ? pm_data['utilization']
+                  : 'N/A',
               };
               this.dataService.panel_data[node_id].push(store);
             }
-            if (data.length > 1) {
+            if (data.length > 0) {
               var info: LinkDataResponse = data[0];
+              console.log('got promise data Utilization Data', info);
               this.dataService.panel_data[node_id].push({
                 source: node_id,
                 interface: li['linkA'],
@@ -288,11 +304,15 @@ export class D3GraphTextNodeComponent implements OnInit {
                 utilization_avg: info.MwUtilizationAvg,
                 utilization_max: info.MwUtilizationMax,
                 target: ch + `(${li['linkB']})`,
-                bandwidth: pm_data['bandwidth'],
-                resource_name: pm_data['resource_name'],
-                inbound: pm_data['inbound'],
-                outbound: pm_data['outbound'],
-                utilization: pm_data['utilization'],
+                bandwidth: pm_data?.bandwidth ? pm_data['bandwidth'] : 'N/A',
+                resource_name: pm_data?.resource_name
+                  ? pm_data['resource_name']
+                  : 'N/A',
+                inbound: pm_data?.inbound ? pm_data['inbound'] : 'N/A',
+                outbound: pm_data?.outbound ? pm_data['outbound'] : 'N/A',
+                utilization: pm_data?.utilization
+                  ? pm_data['utilization']
+                  : 'N/A',
               });
             }
             // setting utilization data
