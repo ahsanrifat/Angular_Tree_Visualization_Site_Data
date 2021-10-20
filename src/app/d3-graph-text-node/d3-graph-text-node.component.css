@@ -1,5 +1,8 @@
 ::ng-deep .scene-tooltip {
   color: rgb(0, 0, 0) !important;
-  font-size: 18px;
-  background-color: rgb(255, 255, 255) !important;
+  font-size: 12px;
+  background-color: #fafafa !important;
+  padding-left: 7px;
+  padding-right: 7px;
+  /* border: 0.5px solid black; */
 }

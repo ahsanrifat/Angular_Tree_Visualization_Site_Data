@@ -7,6 +7,7 @@ import { LinkDataResponse, NodeDataView } from './data-models/data-models';
 })
 export class DataServiceService {
   api_loading = new EventEmitter<boolean>();
+  graph_type_change = new EventEmitter<boolean>();
   search_btn_clicked = new EventEmitter<boolean>();
   node_map_click = new EventEmitter<boolean>();
   panelOpenState = false;
@@ -21,7 +22,7 @@ export class DataServiceService {
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
-  test_api(site: string) {
+  get_topology_data(site: string) {
     const tree_data = this.http.get(
       `${this.root_url}/network-topology?site_name=${site}`
     );

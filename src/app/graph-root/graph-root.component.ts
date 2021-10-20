@@ -110,7 +110,7 @@ export class GraphRootComponent implements OnInit {
     site_name = site_name.toUpperCase();
     if (site_name.length > 3) {
       if (
-        (site_name.startsWith('W') && site_name.includes('-ER-')) ||
+        (site_name.startsWith('W') && site_name.includes('ER')) ||
         site_name.includes('UPE')
       ) {
         this.dataService.panelOpenState = false;
@@ -118,7 +118,7 @@ export class GraphRootComponent implements OnInit {
         this.show_map_label = 'Show Map';
         this.dataService.search_btn_clicked.emit(true);
         this.dataService.is_topology_loading = true;
-        this.dataService.test_api(site_name).subscribe((data: []) => {
+        this.dataService.get_topology_data(site_name).subscribe((data: []) => {
           this.dataService.panel_current_view_data = [];
           this.dataService.current_source = site_name;
           this.graph_data.emit(data);
@@ -159,6 +159,7 @@ export class GraphRootComponent implements OnInit {
   }
   graphNatureChange(event) {
     this.dataService.graph_type = event.target.value;
+    this.dataService.graph_type_change.emit(event.target.value);
   }
   getUtilizationColor(utilization_val) {
     if (utilization_val != '') {

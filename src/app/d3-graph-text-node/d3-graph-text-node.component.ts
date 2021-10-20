@@ -15,6 +15,7 @@ export class D3GraphTextNodeComponent implements OnInit {
   links: any[] = [];
   all_nodes = {};
   all_links = {};
+  main_topology_api_all_data = null;
   child_dict = {};
   node_tracker = {};
   visited_node = {};
@@ -22,6 +23,8 @@ export class D3GraphTextNodeComponent implements OnInit {
   pm_data = {};
   source_target_dict = {};
   node_to_node_child = {};
+  alarm_nodes_arr = [];
+  alarm_links_arr = [];
   is_api_loading = false;
   invalid_graph = false;
   loading_pm_data = false;
@@ -36,38 +39,52 @@ export class D3GraphTextNodeComponent implements OnInit {
         } else {
           this.is_api_loading = true;
         }
-        console.log('is_api_loading', this.is_api_loading);
+        console.log('api_loading_status->', this.is_api_loading);
       });
-      this.dataService.search_btn_clicked.subscribe((data) => {
+      // when user presses search button
+      this.dataService.search_btn_clicked.subscribe(() => {
         this.reset_data();
-        var myGraph = ForceGraph3D();
-        myGraph(document.getElementById('graph'))
-          .graphData({
-            nodes: [],
-            links: [],
-          })
-          .backgroundColor('#FFFFFF');
+        this.reset_graph();
       });
+      // when the graph type is changed
+      this.dataService.graph_type_change.subscribe((graph_type) => {
+        console.log('Graph type change-->', graph_type);
+        if (this.main_topology_api_all_data) {
+          this.initiate_graph(graph_type);
+        }
+      });
+      // when we get graph data
       this.graph_data.subscribe((data) => {
-        // console.log('D3 Text->', data);
-        if (this.dataService.graph_type == 'step') {
-          this.make_setp_wise_graph(data);
-        }
-        if (this.dataService.graph_type == 'no_step') {
-          this.make_full_graph(data);
-        }
+        this.main_topology_api_all_data = data;
+        this.initiate_graph(this.dataService.graph_type);
       });
     } catch (err) {
       console.log('Exception->(ngOnInit)', err);
     }
   }
-  make_setp_wise_graph(data) {
+  initiate_graph(type) {
+    console.log('Initiating Graph');
+    this.reset_graph();
+    if (type == 'step') {
+      this.make_setp_wise_graph(this.main_topology_api_all_data);
+    }
+    if (type == 'no_step') {
+      this.make_full_graph('full_graph');
+    }
+    if (type == 'alarm') {
+      this.make_full_graph('alarm');
+    }
+  }
+  make_setp_wise_graph(topology_data) {
     try {
       if (
-        data.hasOwnProperty('nodes_dict') &&
-        data.hasOwnProperty('links_dict')
+        topology_data.hasOwnProperty('nodes_dict') &&
+        topology_data.hasOwnProperty('links_dict')
       ) {
+        const backup_all_data = this.main_topology_api_all_data;
         this.reset_data();
+        this.main_topology_api_all_data = backup_all_data;
+        const data = JSON.parse(JSON.stringify(topology_data));
         this.pm_data = data['pm_data'];
         this.all_links = data['links_dict'];
         this.all_nodes = data['nodes_dict'];
@@ -84,16 +101,18 @@ export class D3GraphTextNodeComponent implements OnInit {
           .linkWidth(1)
           .linkOpacity(0.8)
           .linkColor('edge_color')
-          // .linkDirectionalArrowLength(12)
-          // .linkDirectionalArrowRelPos(1)
           .linkLabel('edge_label')
           .nodeThreeObject((node) => {
+            let image_name = 'tower1.png';
+            if (node.alarm) {
+              image_name = 'tower_red.png';
+            }
             const imgTexture = new THREE.TextureLoader().load(
-              'assets/tower1.png'
+              `assets/${image_name}`
             );
             const material = new THREE.SpriteMaterial({ map: imgTexture });
             let sprite = new THREE.Sprite(material);
-            sprite.scale.set(12, 12);
+            sprite.scale.set(15, 15);
             // return sprite;
             // sprite = new SpriteText(node.label.replace('GigabitEthernet', ''));
             // sprite.color = node.color;
@@ -102,6 +121,7 @@ export class D3GraphTextNodeComponent implements OnInit {
           })
           .onNodeClick((node: { type; label; id; is_expanded }) => {
             console.log('Node click-', node.id, node.is_expanded);
+            // console.log('Is Expanded on click', node.is_expanded);
             if (
               node.type != 'link' &&
               node.is_expanded == false &&
@@ -132,69 +152,71 @@ export class D3GraphTextNodeComponent implements OnInit {
       console.log('Exception->(make_setp_wise_graph)', err);
     }
   }
-  make_full_graph(data) {
+  make_full_graph(type) {
     try {
-      if (
-        data.hasOwnProperty('nodes_arr') &&
-        data.hasOwnProperty('links_arr')
-      ) {
-        this.reset_data();
-        this.pm_data = data['pm_data'];
-        this.nodes = data['nodes_arr'];
-        this.links = data['links_arr'];
-        this.all_links = data['links_dict'];
-        this.all_nodes = data['nodes_dict'];
-        this.child_dict = data['child_dict'];
-        this.source_target_dict = data['source_target_dict'];
-        this.node_to_node_child = data['node_to_node_child'];
-        var myGraph = ForceGraph3D();
-        myGraph(document.getElementById('graph'))
-          .backgroundColor('#FFFFFF')
-          .graphData({ nodes: this.nodes, links: this.links })
-          .nodeLabel('label')
-          .nodeColor('color')
-          .linkWidth(1)
-          .linkOpacity(0.8)
-          // .linkDirectionalArrowLength(12)
-          // .linkDirectionalArrowRelPos(1)
-          .linkLabel('edge_label')
-          .linkColor('edge_color')
-          .nodeThreeObject((node) => {
-            const imgTexture = new THREE.TextureLoader().load(
-              'assets/tower1.png'
-            );
-            const material = new THREE.SpriteMaterial({ map: imgTexture });
-            let sprite = new THREE.Sprite(material);
-            sprite.scale.set(15, 15);
-            // const sprite = new SpriteText(
-            //   node.label.replace('GigabitEthernet', '')
-            // );
-            // sprite.color = node.color;
-            // sprite.textHeight = 8;
-            // sprite.fontWeight = 'bold';
-            return sprite;
-          })
-          .onNodeClick((node: { type; label; id }) => {
-            console.log('Node click-', node.type);
-            if (node.type != 'link') {
-              this.load_link_data(node.id);
-              this.dataService.panelOpenState = true;
-            }
-          })
-          .onLinkClick((node: { type; label }) => {
-            console.log('Node click-', node.type);
-          });
-        myGraph.d3Force('charge').strength(-180);
-        // await this.get_pm_data_for_all_links_full_graph();
-        this.link_data_changed.subscribe((data) => {
-          if (this.dataService.graph_type == 'no_step') {
-            myGraph.graphData({ nodes: this.nodes, links: this.links });
-          }
-        });
+      // this.set_topoly_data();
+      let graph_data_full = { nodes: [], links: [] };
+      if (type == 'alarm') {
+        graph_data_full = {
+          nodes: this.main_topology_api_all_data['alarm_nodes_arr'],
+          links: this.main_topology_api_all_data['alarm_links_arr'],
+        };
       } else {
-        this.invalid_graph = true;
+        graph_data_full = {
+          nodes: this.main_topology_api_all_data['nodes_arr'],
+          links: this.main_topology_api_all_data['links_arr'],
+        };
       }
+      var myGraph = ForceGraph3D();
+      myGraph(document.getElementById('graph'))
+        .backgroundColor('#FFFFFF')
+        .graphData(graph_data_full)
+        .nodeLabel('label')
+        .nodeColor('color')
+        .linkWidth(1)
+        .linkOpacity(0.8)
+        // .linkDirectionalArrowLength(12)
+        // .linkDirectionalArrowRelPos(1)
+        .linkLabel('edge_label')
+        .linkColor('edge_color')
+        .nodeThreeObject((node) => {
+          let image_name = 'tower1.png';
+          if (node.alarm) {
+            image_name = 'tower_red.png';
+          }
+          const imgTexture = new THREE.TextureLoader().load(
+            `assets/${image_name}`
+          );
+          const material = new THREE.SpriteMaterial({ map: imgTexture });
+          let sprite = new THREE.Sprite(material);
+          sprite.scale.set(15, 15);
+          // const sprite = new SpriteText(
+          //   node.label.replace('GigabitEthernet', '')
+          // );
+          // sprite.color = node.color;
+          // sprite.textHeight = 8;
+          // sprite.fontWeight = 'bold';
+          return sprite;
+        })
+        .onNodeClick((node: { type; label; id }) => {
+          console.log('Node click-', node.type);
+          if (node.type != 'link') {
+            this.load_link_data(node.id);
+            this.dataService.panelOpenState = true;
+          }
+        })
+        .onLinkClick((node: { type; label }) => {
+          console.log('Node click-', node.type);
+        });
+      myGraph.d3Force('charge').strength(-180);
+      // await this.get_pm_data_for_all_links_full_graph();
+      this.link_data_changed.subscribe((data) => {
+        if (this.dataService.graph_type == 'no_step') {
+          myGraph.graphData({ nodes: this.nodes, links: this.links });
+        }
+      });
     } catch (err) {
+      this.invalid_graph = true;
       console.log('Exception->(make_full_graph)', err);
       this.loading_pm_data = false;
     }
@@ -327,6 +349,24 @@ export class D3GraphTextNodeComponent implements OnInit {
       console.log('Exception->(load_link_data)', err);
     }
   }
+  set_topoly_data() {
+    try {
+      this.pm_data = this.main_topology_api_all_data['pm_data'];
+      this.nodes = this.main_topology_api_all_data['nodes_arr'];
+      this.links = this.main_topology_api_all_data['links_arr'];
+      this.all_links = this.main_topology_api_all_data['links_dict'];
+      this.all_nodes = this.main_topology_api_all_data['nodes_dict'];
+      this.child_dict = this.main_topology_api_all_data['child_dict'];
+      this.source_target_dict =
+        this.main_topology_api_all_data['source_target_dict'];
+      this.node_to_node_child =
+        this.main_topology_api_all_data['node_to_node_child'];
+      this.alarm_nodes_arr = this.main_topology_api_all_data['alarm_nodes_arr'];
+      this.alarm_links_arr = this.main_topology_api_all_data['alarm_links_arr'];
+    } catch (err) {
+      console.log('Exception->(set_topoly_data)', err);
+    }
+  }
   reset_data() {
     try {
       this.all_nodes = {};
@@ -344,9 +384,21 @@ export class D3GraphTextNodeComponent implements OnInit {
       this.is_api_loading = false;
       this.invalid_graph = false;
       this.pm_data = {};
+      this.alarm_nodes_arr = [];
+      this.alarm_links_arr = [];
+      this.main_topology_api_all_data = null;
     } catch (err) {
       console.log('Exception->(reset_data)', err);
     }
+  }
+  reset_graph() {
+    var myGraph = ForceGraph3D();
+    myGraph(document.getElementById('graph'))
+      .graphData({
+        nodes: [],
+        links: [],
+      })
+      .backgroundColor('#FFFFFF');
   }
   make_links(start_node) {
     try {
