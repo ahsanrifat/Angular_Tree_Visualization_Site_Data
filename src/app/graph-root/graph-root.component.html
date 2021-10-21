@@ -44,7 +44,6 @@
             >
               <option value="step">Step By Step</option>
               <option value="no_step">Full Graph</option>
-              <option value="alarm">Alarm</option>
             </select>
           </div>
           <div class="col-xl-2" style="margin-top: 18px">
@@ -132,6 +131,13 @@
 <!-- <app-optional-graph></app-optional-graph> -->
 <button mat-raised-button (click)="mapToggle()" style="margin: 10px">
   {{ this.show_map_label }}
+</button>
+<button
+  mat-raised-button
+  (click)="showAlarmGraph('alarm')"
+  style="margin: 10px"
+>
+  {{ this.alarm_graph_btn_label }}
 </button>
 <agm-map
   *ngIf="this.show_map"

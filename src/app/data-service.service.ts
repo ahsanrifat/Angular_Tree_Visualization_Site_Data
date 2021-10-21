@@ -7,7 +7,7 @@ import { LinkDataResponse, NodeDataView } from './data-models/data-models';
 })
 export class DataServiceService {
   api_loading = new EventEmitter<boolean>();
-  graph_type_change = new EventEmitter<boolean>();
+  graph_type_change = new EventEmitter<string>();
   search_btn_clicked = new EventEmitter<boolean>();
   node_map_click = new EventEmitter<boolean>();
   panelOpenState = false;

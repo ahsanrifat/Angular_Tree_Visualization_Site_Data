@@ -17,6 +17,8 @@ export class GraphRootComponent implements OnInit {
   zoom: number = 8;
   show_map = false;
   show_map_label = 'Show Map';
+  alarm_graph_btn_label = 'Show Alarm Graph';
+  is_alarm_graph = false;
   city_loc_dict = [];
   data_center_loc = [];
   node_array_map = [];
@@ -131,6 +133,18 @@ export class GraphRootComponent implements OnInit {
     } else {
       alert('Search node must comtain at least 4 characters!');
     }
+  }
+  showAlarmGraph(type) {
+    try {
+      this.is_alarm_graph = !this.is_alarm_graph;
+      if (this.is_alarm_graph) {
+        this.dataService.graph_type_change.emit(type);
+        this.alarm_graph_btn_label = 'Switch to full graph';
+      } else {
+        this.dataService.graph_type_change.emit('no_step');
+        this.alarm_graph_btn_label = 'Show Alarm Graph';
+      }
+    } catch (err) {}
   }
   onRegionSelect(event) {
     this.dataService.panelOpenState = false;

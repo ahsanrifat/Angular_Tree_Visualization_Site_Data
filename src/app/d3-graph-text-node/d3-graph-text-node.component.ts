@@ -28,6 +28,15 @@ export class D3GraphTextNodeComponent implements OnInit {
   is_api_loading = false;
   invalid_graph = false;
   loading_pm_data = false;
+  image_map = {
+    upe: 'upe.png',
+    upe_alarm: 'upe.png',
+    er: 'tower.png',
+    fon: 'fon.png',
+    fon_alarm: 'fon.png',
+    er_alarm: 'tower_red.png',
+    default: 'default.jpg',
+  };
   constructor(public dataService: DataServiceService) {}
 
   ngOnInit(): void {
@@ -61,6 +70,19 @@ export class D3GraphTextNodeComponent implements OnInit {
     } catch (err) {
       console.log('Exception->(ngOnInit)', err);
     }
+  }
+  get_node_png(node_name, alarm) {
+    const node = node_name.toLowerCase();
+    let node_icon = 'default';
+    if (node.includes('upe')) node_icon = 'upe';
+    else if (node.includes('er')) node_icon = 'er';
+    else if (node.includes('fon')) node_icon = 'fon';
+    if (alarm) {
+      node_icon = this.image_map[node_icon] + '_' + 'alarm';
+    }
+    if (!this.image_map.hasOwnProperty(node_icon)) {
+      return this.image_map[node_icon];
+    } else return 'default.jpg';
   }
   initiate_graph(type) {
     console.log('Initiating Graph');
@@ -103,10 +125,8 @@ export class D3GraphTextNodeComponent implements OnInit {
           .linkColor('edge_color')
           .linkLabel('edge_label')
           .nodeThreeObject((node) => {
-            let image_name = 'tower1.png';
-            if (node.alarm) {
-              image_name = 'tower_red.png';
-            }
+            let image_name = this.get_node_png(node.id, node.alarm);
+            console.log('Image Name', node.id, node.alarm, image_name);
             const imgTexture = new THREE.TextureLoader().load(
               `assets/${image_name}`
             );
@@ -180,10 +200,8 @@ export class D3GraphTextNodeComponent implements OnInit {
         .linkLabel('edge_label')
         .linkColor('edge_color')
         .nodeThreeObject((node) => {
-          let image_name = 'tower1.png';
-          if (node.alarm) {
-            image_name = 'tower_red.png';
-          }
+          let image_name = this.get_node_png(node.id, node.alarm);
+          console.log('Image Name', node.id, node.alarm, image_name);
           const imgTexture = new THREE.TextureLoader().load(
             `assets/${image_name}`
           );
@@ -243,7 +261,6 @@ export class D3GraphTextNodeComponent implements OnInit {
       return resolve_data;
     }
   }
-
   get_link_data(node_id, search_str, link, child) {
     return new Promise((resolve, reject) => {
       try {
