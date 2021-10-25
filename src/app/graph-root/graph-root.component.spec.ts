@@ -8,9 +8,8 @@ describe('GraphRootComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GraphRootComponent ]
-    })
-    .compileComponents();
+      declarations: [GraphRootComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

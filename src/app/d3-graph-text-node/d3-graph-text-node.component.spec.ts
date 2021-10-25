@@ -8,9 +8,8 @@ describe('D3GraphTextNodeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ D3GraphTextNodeComponent ]
-    })
-    .compileComponents();
+      declarations: [D3GraphTextNodeComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

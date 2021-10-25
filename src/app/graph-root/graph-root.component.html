@@ -1,63 +1,94 @@
-<div class="row" style="margin-top: 10px; margin-left: 8px">
-  <div class="col-xl-7">
+<div class="row" style="margin-top: 0px; margin-left: 8px">
+  <div class="col-xl-4">
     <!-- Search Site Part -->
     <div class="row">
-      <div class="col-xl-12">
-        <div class="row" style="margin-top: 2px">
-          <div class="col-xl-3 close_col_gap">
-            <h4>Region</h4>
-            <select
-              class="reg_sel"
-              (change)="onRegionSelect($event)"
-              style="width: 100px; height: 30px"
-            >
-              <option selected disabled>Region</option>
-              <option *ngFor="let reg of region_options" [value]="reg">
-                {{ reg }}
-              </option>
-            </select>
-          </div>
-          <div class="col-xl-3" style="margin-top: 18px">
-            <input
-              type="text"
-              #titleInput
-              class="form-control"
-              [value]="selected_node"
-            />
-            <h6>Example : W0410-MWN-ER-T1-JED</h6>
-          </div>
-          <div class="col-xl-2" style="margin-top: 18px; max-width: 15%">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="showGraph(titleInput.value)"
-            >
-              Search
-            </button>
-          </div>
-          <div class="col-xl-2 close_col_gap">
-            <h4>Topology type</h4>
-            <select
-              placeholder="Step By Step"
-              (change)="graphNatureChange($event)"
-              style="width: 130px; height: 30px"
-            >
-              <option value="step">Step By Step</option>
-              <option value="no_step">Full Graph</option>
-            </select>
-          </div>
-          <div class="col-xl-2" style="margin-top: 18px">
-            <img
-              src="assets/reload.png"
-              alt=""
-              srcset=""
-              style="width: 40px; cursor: pointer"
-              (click)="reload_page()"
-            />
-          </div>
-        </div>
+      <div class="col-xl-6" style="margin-top: 18px">
+        <input
+          type="text"
+          #titleInput
+          class="form-control"
+          [value]="selected_node"
+        />
+        <h6>Example : W0410-MWN-ER-T1-JED</h6>
+      </div>
+      <div class="col-xl-6" style="margin-top: 18px; max-width: 15%">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="showGraph(titleInput.value)"
+        >
+          Search
+        </button>
       </div>
     </div>
+    <div class="row">
+      <div class="col-xl-5">
+        <h4>Region</h4>
+        <select
+          class="reg_sel"
+          (change)="onRegionSelect($event)"
+          style="width: 100px; height: 30px"
+        >
+          <option selected disabled>Region</option>
+          <option *ngFor="let reg of region_options" [value]="reg">
+            {{ reg }}
+          </option>
+        </select>
+      </div>
+      <div class="col-xl-5">
+        <h4>Topology type</h4>
+        <select
+          placeholder="Step By Step"
+          (change)="graphNatureChange($event)"
+          style="width: 130px; height: 30px"
+        >
+          <option value="step">Step By Step</option>
+          <option value="no_step">Full Graph</option>
+        </select>
+      </div>
+      <div class="col-xl-2" style="margin-top: 18px">
+        <img
+          src="assets/reload.png"
+          alt=""
+          srcset=""
+          style="width: 40px; cursor: pointer"
+          (click)="reload_page()"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6">
+    <h3 style="font-weight: bold">Down Site List</h3>
+    <h5 *ngIf="alarm_table_data.length == 0">No Data Available</h5>
+    <table
+      style="
+        display: block;
+        width: 590px;
+        height: 200px;
+        overflow-y: scroll;
+        word-wrap: initial !important;
+        font-size: 12px;
+      "
+      *ngIf="alarm_table_data.length > 0"
+    >
+      <tr>
+        <th>No.</th>
+        <th>Time</th>
+        <th>Node</th>
+        <th>Message</th>
+      </tr>
+      <tr *ngFor="let alarm of alarm_table_data; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ alarm.time }}</td>
+        <td
+          style="cursor: Pointer; color: blueviolet"
+          (click)="showGraph(alarm.node)"
+        >
+          {{ alarm.node }}
+        </td>
+        <td>{{ alarm.message }}</td>
+      </tr>
+    </table>
   </div>
 </div>
 <!-- Utilization and PM data panel -->
@@ -127,7 +158,6 @@
     </mat-expansion-panel>
   </div>
 </div>
-
 <!-- <app-optional-graph></app-optional-graph> -->
 <button mat-raised-button (click)="mapToggle()" style="margin: 10px">
   {{ this.show_map_label }}
@@ -138,6 +168,13 @@
   style="margin: 10px"
 >
   {{ this.alarm_graph_btn_label }}
+</button>
+<button
+  mat-raised-button
+  (click)="change_site_appearance_type()"
+  style="margin: 10px"
+>
+  {{ this.dataService.site_view_type }}
 </button>
 <agm-map
   *ngIf="this.show_map"

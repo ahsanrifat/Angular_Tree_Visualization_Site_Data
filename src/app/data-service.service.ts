@@ -19,6 +19,9 @@ export class DataServiceService {
   panel_current_pm_data = [];
   is_topology_loading = false;
   loading_utilization = false;
+  site_view_type = 'Show Site Name';
+  is_site_view_text = false;
+  site_type_change = new EventEmitter<boolean>();
   graph_type = 'step';
   root_url = 'http://localhost:9500/EricssonGISIntellegentDatabase/api';
   constructor(private http: HttpClient) {}
@@ -41,5 +44,11 @@ export class DataServiceService {
       `http://localhost:9500/EricssonGISIntellegentDatabase/getDataCenterTopologyByRegion?Region=${region}`
     );
     return region_data;
+  }
+  get_alarm_site_data() {
+    const alarm_data = this.http.get<[]>(
+      `http://localhost:9500/EricssonGISIntellegentDatabase/api/alarm-site-data`
+    );
+    return alarm_data;
   }
 }

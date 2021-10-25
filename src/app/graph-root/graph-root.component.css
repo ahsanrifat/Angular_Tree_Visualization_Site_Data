@@ -37,6 +37,9 @@ td.mat-footer-cell {
   border-bottom-width: 1px;
   border-bottom-style: solid;
 }
+.pad-th {
+  margin-right: 20px;
+}
 option {
   max-width: 100%;
   overflow: hidden;

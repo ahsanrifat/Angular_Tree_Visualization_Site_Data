@@ -1,8 +1,8 @@
 export interface NodeList {
-  NodeList: (Node)[] | null;
+  NodeList: Node[] | null;
 }
-export interface EdgeList{
-  EdgeList: (Edge)[] | null;
+export interface EdgeList {
+  EdgeList: Edge[] | null;
 }
 export interface Node {
   ProblemTypeId: string;

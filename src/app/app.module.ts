@@ -19,6 +19,7 @@ import { D3GraphTextNodeComponent } from './d3-graph-text-node/d3-graph-text-nod
 import { GraphRootComponent } from './graph-root/graph-root.component';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ModalComponentComponent } from './modal-component/modal-component.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +42,7 @@ import { ModalComponentComponent } from './modal-component/modal-component.compo
     MatInputModule,
     MatExpansionModule,
     MatTableModule,
+    MatGridListModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD5xT4mLCRpIux2TnrodKNJll9LVME23SI',
     }),

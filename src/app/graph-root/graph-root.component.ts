@@ -17,13 +17,14 @@ export class GraphRootComponent implements OnInit {
   zoom: number = 8;
   show_map = false;
   show_map_label = 'Show Map';
-  alarm_graph_btn_label = 'Show Alarm Graph';
+  alarm_graph_btn_label = 'Show Path To Fault Node';
   is_alarm_graph = false;
   city_loc_dict = [];
   data_center_loc = [];
   node_array_map = [];
   map_site_list_label = 'Site List';
   region_data = [];
+  alarm_table_data = [];
   selected_node = 'W0410-MWN-ER-T1-JED';
   markers: Marker[] = [];
   displayedColumns: string[] = [
@@ -38,100 +39,134 @@ export class GraphRootComponent implements OnInit {
   region_options = ['Centeral', 'Eastern', 'North', 'West'];
   constructor(public dataService: DataServiceService) {}
   public ngOnInit(): void {
-    this.dataService.api_loading.subscribe((data) => {
-      if (data == false) {
-        this.show_loading = false;
-      } else {
-        this.show_loading = true;
-      }
-    });
+    try {
+      this.dataService.api_loading.subscribe((data) => {
+        if (data == false) {
+          this.show_loading = false;
+        } else {
+          this.show_loading = true;
+        }
+      });
+      this.dataService.get_alarm_site_data().subscribe((data) => {
+        this.alarm_table_data = data;
+      });
+    } catch (err) {
+      console.log('Exception-(graph-root)-(ngOnInit)->', err);
+    }
   }
   clickedMarker(label: string, index: number) {
-    const city_name = label;
-    // console.log(`clicked the marker: ${label || index}`);
-    if (this.city_loc_dict.hasOwnProperty(city_name)) {
-      // a city has been clicked
-      console.log('City Clicked->', city_name);
-      this.city_loc_dict = [];
-      this.markers = [];
-      if (!this.data_center_loc.hasOwnProperty(city_name)) {
-        this.data_center_loc[city_name] = true;
-        let is_set_label = false;
-        for (var obj of this.region_data) {
-          if (obj['City'] == city_name) {
-            this.data_center_loc[obj['DataCenter']] = true;
-            this.markers.push({
-              lat: obj['DataCenterLaitude'],
-              lng: obj['DataCenterLongitude'],
-              label: obj['DataCenter'],
-              draggable: false,
-            });
+    try {
+      const city_name = label;
+      // console.log(`clicked the marker: ${label || index}`);
+      if (this.city_loc_dict.hasOwnProperty(city_name)) {
+        // a city has been clicked
+        console.log('City Clicked->', city_name);
+        this.city_loc_dict = [];
+        this.markers = [];
+        if (!this.data_center_loc.hasOwnProperty(city_name)) {
+          this.data_center_loc[city_name] = true;
+          let is_set_label = false;
+          for (var obj of this.region_data) {
+            if (obj['City'] == city_name) {
+              this.data_center_loc[obj['DataCenter']] = true;
+              this.markers.push({
+                lat: obj['DataCenterLaitude'],
+                lng: obj['DataCenterLongitude'],
+                label: obj['DataCenter'],
+                draggable: false,
+              });
+            }
           }
         }
-      }
-    } else if (this.data_center_loc.hasOwnProperty(city_name)) {
-      // its a datacenter
-      const center = label;
-      this.map_site_list_label = label + '- Site List';
-      console.log('Data Center->', center);
-      this.show_map_popup = true;
-      this.node_array_map = [];
-      for (var obj of this.region_data) {
-        if (obj['DataCenter'] == center) {
-          this.node_array_map.push(obj['NodeName']);
+      } else if (this.data_center_loc.hasOwnProperty(city_name)) {
+        // its a datacenter
+        const center = label;
+        this.map_site_list_label = label + '- Site List';
+        // console.log('Data Center->', center);
+        this.show_map_popup = true;
+        this.node_array_map = [];
+        for (var obj of this.region_data) {
+          if (obj['DataCenter'] == center) {
+            this.node_array_map.push(obj['NodeName']);
+          }
         }
+        // console.log('Node Array->', this.node_array_map);
       }
-      console.log('Node Array->', this.node_array_map);
+    } catch (err) {
+      console.log('Exception-(graph-root)-(clickedMarker)->', err);
     }
   }
   mapNodeClicked(node) {
     // this.dataService.node_map_click.emit(node);
-    console.log(node);
+    // console.log(node);
     this.selected_node = node;
     this.showGraph(node);
   }
   markerDragEnd(m: Marker, $event) {
-    console.log('dragEnd', m, $event);
+    // console.log('dragEnd', m, $event);
   }
   mapClicked($event) {
-    console.log($event);
+    // console.log($event);
   }
 
   mapToggle() {
-    this.show_map = !this.show_map;
-    if (this.show_map) {
-      this.show_map_label = 'Hide Map';
-    } else {
-      this.show_map_label = 'Show Map';
+    try {
+      this.show_map = !this.show_map;
+      if (this.show_map) {
+        this.show_map_label = 'Hide Map';
+      } else {
+        this.show_map_label = 'Show Map';
+      }
+    } catch (err) {
+      console.log('Exception-(graph-root)-(mapToggle)->', err);
     }
   }
   reload_page() {
-    location.reload();
+    try {
+      location.reload();
+    } catch (err) {
+      console.log('Exception-(graph-root)-(reload_page)->', err);
+    }
   }
   showGraph(site_name) {
-    site_name = site_name.toUpperCase();
-    if (site_name.length > 3) {
-      if (
-        (site_name.startsWith('W') && site_name.includes('ER')) ||
-        site_name.includes('UPE')
-      ) {
-        this.dataService.panelOpenState = false;
-        this.show_map = false;
-        this.show_map_label = 'Show Map';
-        this.dataService.search_btn_clicked.emit(true);
-        this.dataService.is_topology_loading = true;
-        this.dataService.get_topology_data(site_name).subscribe((data: []) => {
-          this.dataService.panel_current_view_data = [];
-          this.dataService.current_source = site_name;
-          this.graph_data.emit(data);
-          this.dataService.is_topology_loading = false;
-          console.log('API Root Data-->', data);
-        });
+    try {
+      site_name = site_name.toUpperCase();
+      if (site_name.length > 3) {
+        const re = /[Ww][0-9]{4}/;
+        if (site_name.match(re) != null || site_name.includes('UPE')) {
+          this.selected_node = site_name;
+          // this.dataService.site_view_type = 'Show Site Name';
+          // this.dataService.is_site_view_text = false;
+          this.dataService.panelOpenState = false;
+          this.show_map = false;
+          this.show_map_label = 'Show Map';
+          this.alarm_graph_btn_label = 'Show Path To Fault Node';
+          this.is_alarm_graph = false;
+          this.dataService.search_btn_clicked.emit(true);
+          this.dataService.is_topology_loading = true;
+          this.dataService
+            .get_topology_data(site_name)
+            .subscribe((data: []) => {
+              this.dataService.panel_current_view_data = [];
+              this.dataService.current_source = site_name;
+              this.graph_data.emit(data);
+              this.dataService.is_topology_loading = false;
+              if (data.hasOwnProperty('alarm_data_list')) {
+                this.alarm_table_data = data['alarm_data_list'];
+                console.log('Alarm_data_list-->', this.alarm_table_data);
+              }
+              console.log('API Root Data-->', data);
+            });
+        } else {
+          alert(
+            'Search node must starts with W followed by 4 digits (Ex-W5905...)'
+          );
+        }
       } else {
-        alert('Search node must starts with W and include `-ER-`');
+        alert('Search node must comtain at least 4 characters!');
       }
-    } else {
-      alert('Search node must comtain at least 4 characters!');
+    } catch (err) {
+      console.log('Exception-(graph-root)-(showgraph)->', err);
     }
   }
   showAlarmGraph(type) {
@@ -142,11 +177,15 @@ export class GraphRootComponent implements OnInit {
         this.alarm_graph_btn_label = 'Switch to full graph';
       } else {
         this.dataService.graph_type_change.emit('no_step');
-        this.alarm_graph_btn_label = 'Show Alarm Graph';
+        this.alarm_graph_btn_label = 'Show Path To Fault Node';
       }
     } catch (err) {}
   }
   onRegionSelect(event) {
+    try {
+    } catch (err) {
+      console.log('Exception-(graph-root)-(onRegionSelect)->', err);
+    }
     this.dataService.panelOpenState = false;
     this.dataService.panel_current_view_data = [];
     const region = event.target.value;
@@ -174,6 +213,10 @@ export class GraphRootComponent implements OnInit {
   graphNatureChange(event) {
     this.dataService.graph_type = event.target.value;
     this.dataService.graph_type_change.emit(event.target.value);
+    if (!event.target.value.includes('alarm')) {
+      this.alarm_graph_btn_label = 'Show Path To Fault Node';
+      this.is_alarm_graph = false;
+    }
   }
   getUtilizationColor(utilization_val) {
     if (utilization_val != '') {
@@ -196,9 +239,22 @@ export class GraphRootComponent implements OnInit {
     return 'uti';
   }
   checkNumber(number) {
+    try {
+    } catch (err) {
+      console.log('Exception-(graph-root)-(checkNumber)->', err);
+    }
     if (Number(number)) {
       return parseFloat(number).toFixed(2);
     }
     return 'N/A';
+  }
+  change_site_appearance_type() {
+    this.dataService.is_site_view_text = !this.dataService.is_site_view_text;
+    this.dataService.site_type_change.emit(this.dataService.is_site_view_text);
+    if (this.dataService.is_site_view_text) {
+      this.dataService.site_view_type = 'Show Site Icon';
+    } else {
+      this.dataService.site_view_type = 'Show Site Name';
+    }
   }
 }
